@@ -39,6 +39,7 @@ Thumbs.db
 *.orig
 tmp/
 temp/
+CURRENT_WORK.md
 
 # Dependency and build output
 node_modules/
@@ -47,4 +48,3 @@ dist/
 build/
 coverage/
 .cache/
-
