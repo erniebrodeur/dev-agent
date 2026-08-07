@@ -1,0 +1,50 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+
+# Common credential and machine-local files
+.netrc
+.npmrc
+.pypirc
+credentials.json
+service-account*.json
+secrets.*
+*.secret
+
+# Editors, operating systems, and local tooling
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.direnv/
+.envrc
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+tmp/
+temp/
+
+# Dependency and build output
+node_modules/
+vendor/
+dist/
+build/
+coverage/
+.cache/
+
