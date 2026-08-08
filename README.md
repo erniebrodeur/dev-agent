@@ -2,7 +2,7 @@
 
 Dev Agent is a Codex plugin for disciplined, evidence-driven software development workflows.
 
-The project is being built as a sequence of independently reviewed slices. The current plugin can activate its portable development policy for one task, install a project-owned copy, recover project context, develop uncertain direction into approved implementation slices, implement one approved slice at a time, diagnose concrete failures before proposing corrections, and run user-authorized Semgrep security checks.
+The project is being built as a sequence of independently reviewed slices. The current plugin can activate its portable development policy for one task, install a project-owned copy, recover project context, develop uncertain direction into approved implementation slices, implement one approved slice at a time, prepare and approve local commits in two phases, diagnose concrete failures before proposing corrections, and run user-authorized Semgrep security checks.
 
 ## Use
 
@@ -31,6 +31,8 @@ After the user clearly authorizes an approved slice, `next-slice` resolves that 
 Troubleshooting activates implicitly for a concrete software failure. It reproduces the mismatch through the real interface, tests competing hypotheses, distinguishes evidence from inference, and proposes a corrective slice. It remains diagnosis-only and waits for approval before any implementation change, even when the original request asked for a fix.
 
 Security checking runs only after the user requests or approves it. A partial check scans only files changed by the relevant work. A security-check request without narrower scope runs a comprehensive Semgrep scan over the applicable repository, plus any additional tools required by `CONVENTIONS.md`. Failed or unavailable Semgrep makes the check incomplete. Findings are triaged and reported before any separately approved correction.
+
+Local commits use a two-phase workflow. An initial commit request authorizes `commit` to resolve and stage only the intended changes, inspect the complete staged diff, and show the exact scope and proposed message. It creates no commit until the user explicitly approves that proposal in a later message. The skill rechecks for drift before committing and never pushes implicitly.
 
 ## Repository layout
 

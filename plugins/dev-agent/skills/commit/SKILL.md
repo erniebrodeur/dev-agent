@@ -1,0 +1,38 @@
+---
+name: commit
+description: Prepare and create a local Git commit through two explicit authorization phases. Use when the user asks to commit, create a commit, stage changes for commit, proposes a commit message, or approves the exact staged scope and message previously prepared by this skill. An initial commit request stages the intended changes and proposes the exact commit but never creates it without later approval.
+---
+
+# Commit
+
+Prepare a safe, reviewable local commit, obtain approval for its exact staged scope and message, then create only that commit.
+
+## Required authorization boundary
+
+A request to commit, including a direct instruction such as `commit`, authorizes preparation only. Never treat it as approval to create the commit. Wait for explicit approval of the exact staged scope and proposed message in a later user message.
+
+## Preparation phase
+
+1. Read applicable project instructions. Inspect the active branch, upstream relationship, staged, unstaged, and untracked changes, and the commits or diff relevant to the current work.
+2. Resolve the intended change set from the request, current work, and repository evidence. Preserve unrelated changes. If scope is ambiguous or unrelated changes are already staged, stop and ask before modifying the index.
+3. Run or confirm proportional verification for the intended changes. Report any relevant verification that is incomplete or failing rather than concealing it.
+4. Review the intended content, then stage only the intended files with explicit paths. Include deletions only when they are clearly in scope. Do not use a broad staging command while scope is unresolved.
+5. Inspect the complete staged diff, including generated and binary artifacts. Check it for secrets, personal data, local paths, internal hostnames, unintended metadata, and unrelated content. Stop and report any safety concern without repeating sensitive values.
+6. Derive a concise commit message that describes the staged outcome. If the user supplied a message, preserve it as the proposal unless it is misleading or unsafe; report any required correction.
+7. Show the exact staged scope and proposed message, along with relevant verification and safety findings. Wait for explicit approval. Do not create the commit during this phase, even when the original request said to commit.
+
+## Commit phase
+
+1. Confirm that the user's approval clearly applies to the exact staged scope and proposed message.
+2. Reinspect the staged diff and working-tree status. If the staged content, intended scope, relevant verification, or message has material drift, do not commit. Return to the preparation phase and show the revised proposal.
+3. Create the local commit with the approved message and exactly the approved staged content.
+4. Report the commit identifier, message, resulting repository status, and any hook or commit failure. Then stop.
+
+## Boundaries
+
+- Do not commit before the separate approval phase.
+- Do not stage ambiguous, unrelated, ignored, or sensitive content.
+- Do not unstage or rewrite pre-existing staged work without explicit approval.
+- Do not amend, reset, rebase, merge, or tag unless separately authorized.
+- Do not push, open a pull request, deploy, publish, or perform another remote action unless separately authorized.
+- Do not bypass hooks or weaken verification to make the commit succeed.

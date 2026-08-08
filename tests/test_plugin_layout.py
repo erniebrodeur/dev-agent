@@ -15,6 +15,7 @@ MANIFEST_PATH = PLUGIN_ROOT / ".codex-plugin" / "plugin.json"
 MARKETPLACE_PATH = ROOT / ".agents" / "plugins" / "marketplace.json"
 POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
 ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
+COMMIT_ROOT = PLUGIN_ROOT / "skills" / "commit"
 COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
 RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
 PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
@@ -35,6 +36,10 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertEqual("./skills/", manifest["skills"])
         self.assertNotIn("apps", manifest)
         self.assertNotIn("mcpServers", manifest)
+        self.assertIn(
+            "Two-phase local commit preparation and approval",
+            manifest["interface"]["capabilities"],
+        )
 
     def test_activate_is_explicit_and_loads_canonical_policy(self) -> None:
         skill = (ACTIVATE_ROOT / "SKILL.md").read_text()
@@ -113,6 +118,20 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("CURRENT_WORK.md", skill)
         self.assertIn("Do not begin another slice", skill)
         self.assertIn("Committing, pushing", skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
+    def test_commit_prepares_then_waits_for_approval(self) -> None:
+        skill = (COMMIT_ROOT / "SKILL.md").read_text()
+        metadata = (COMMIT_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("authorizes preparation only", skill)
+        self.assertIn("stage only the intended", skill)
+        self.assertIn("complete staged diff", skill)
+        self.assertIn("exact staged scope and proposed message", skill)
+        self.assertIn("Wait for explicit approval", skill)
+        self.assertIn("material drift", skill)
+        self.assertIn("Do not push", skill)
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
@@ -199,6 +218,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "AGENTS.md",
                         "skills/activate/SKILL.md",
                         "skills/activate/agents/openai.yaml",
+                        "skills/commit/SKILL.md",
+                        "skills/commit/agents/openai.yaml",
                         "skills/copy-agents/SKILL.md",
                         "skills/copy-agents/agents/openai.yaml",
                         "skills/next-slice/SKILL.md",
