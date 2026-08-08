@@ -25,7 +25,10 @@ class PluginLayoutTests(unittest.TestCase):
         manifest = json.loads(MANIFEST_PATH.read_text())
 
         self.assertEqual(PLUGIN_ROOT.name, manifest["name"])
-        self.assertEqual("0.1.0", manifest["version"])
+        self.assertRegex(
+            manifest["version"],
+            r"^0\.1\.0\+codex\.[a-z0-9-]+$",
+        )
         self.assertEqual("./skills/", manifest["skills"])
         self.assertNotIn("apps", manifest)
         self.assertNotIn("mcpServers", manifest)
@@ -37,6 +40,11 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertTrue(POLICY_PATH.is_file())
         self.assertIn("`../../AGENTS.md`", skill)
         self.assertIn("`../recover-project-context/SKILL.md`", skill)
+        self.assertIn("Activation is incomplete until", skill)
+        self.assertIn("Do not report Dev Agent as active", skill)
+        self.assertIn("mandatory and blocking", skill)
+        self.assertIn("Do not defer project-context recovery", skill)
+        self.assertIn("context recovery is complete", metadata)
         self.assertIn("current task", skill)
         self.assertIn("allow_implicit_invocation: false", metadata)
         self.assertNotIn("[TODO:", skill)
