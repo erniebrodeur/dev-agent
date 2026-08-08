@@ -17,6 +17,7 @@ The repository and installed plugin have separate responsibilities:
 - `recover-project-context` restores project state implicitly from recovery intent and runs whenever `activate` is invoked. It verifies `CURRENT_WORK.md` with a surface scan or performs a deep repository scan when no checkpoint exists.
 - `planning` activates implicitly when direction is unsettled or no approved implementation slice exists. It runs an evidence-based conversational loop, keeps `CURRENT_WORK.md` current, and produces approved implementation slices without executing them.
 - `next-slice` activates implicitly after clear implementation authorization. It implements exactly one approved slice, verifies it proportionally, updates project memory, and stops before later work.
+- `troubleshoot` activates implicitly for concrete failures. It reproduces the mismatch, tests competing hypotheses, reports confidence and uncertainty, proposes a corrective slice, and waits without editing implementation files.
 - Conversation-mode detection, implementation authorization, and question-versus-assumption discipline remain ambient policy behavior rather than a standalone skill.
 
 Do not make installed skills depend on repository-root development documents. `activate` resolves the portable policy relative to its installed skill directory.

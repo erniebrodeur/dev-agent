@@ -19,6 +19,7 @@ COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
 RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
 PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
 NEXT_SLICE_ROOT = PLUGIN_ROOT / "skills" / "next-slice"
+TROUBLESHOOT_ROOT = PLUGIN_ROOT / "skills" / "troubleshoot"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -111,6 +112,25 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
+    def test_troubleshoot_diagnoses_and_waits_before_correction(self) -> None:
+        skill = (TROUBLESHOOT_ROOT / "SKILL.md").read_text()
+        metadata = (TROUBLESHOOT_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("diagnosis-only", skill)
+        self.assertIn("`../recover-project-context/SKILL.md`", skill)
+        self.assertIn("intended behavior", skill)
+        self.assertIn("observed behavior", skill)
+        self.assertIn("facts from inference", skill)
+        self.assertIn("credible hypotheses", skill)
+        self.assertIn("falsify", skill)
+        self.assertIn("recent change", skill)
+        self.assertIn("confidence and remaining uncertainty", skill)
+        self.assertIn("Do not edit implementation files", skill)
+        self.assertIn("corrective slice", skill)
+        self.assertIn("wait for explicit approval", skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
     def test_copy_agents_requires_an_approved_semantic_merge(self) -> None:
         skill = (COPY_AGENTS_ROOT / "SKILL.md").read_text()
         metadata = (COPY_AGENTS_ROOT / "agents" / "openai.yaml").read_text()
@@ -162,6 +182,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/planning/agents/openai.yaml",
                         "skills/recover-project-context/SKILL.md",
                         "skills/recover-project-context/agents/openai.yaml",
+                        "skills/troubleshoot/SKILL.md",
+                        "skills/troubleshoot/agents/openai.yaml",
                     ],
                     archive.namelist(),
                 )

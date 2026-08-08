@@ -2,7 +2,7 @@
 
 Dev Agent is a Codex plugin for disciplined, evidence-driven software development workflows.
 
-The project is being built as a sequence of independently reviewed slices. The current plugin can activate its portable development policy for one task, install a project-owned copy, recover project context, develop uncertain direction into approved implementation slices, and implement one approved slice at a time.
+The project is being built as a sequence of independently reviewed slices. The current plugin can activate its portable development policy for one task, install a project-owned copy, recover project context, develop uncertain direction into approved implementation slices, implement one approved slice at a time, and diagnose concrete failures before proposing corrections.
 
 ## Use
 
@@ -27,6 +27,8 @@ Project context recovery also activates implicitly for requests such as “where
 Planning activates implicitly when software direction is unsettled or no approved implementation slice exists. It uses repository evidence and a conversational correction loop to resolve major decisions, maintain `CURRENT_WORK.md`, and produce an approved sequence of implementation slices without implementing them.
 
 After the user clearly authorizes an approved slice, `next-slice` implements exactly that slice, verifies it proportionally, updates project memory, and stops. A slice is a coherent, independently reviewable unit of work and an implementation authorization boundary, not necessarily a commit, release, or deployment.
+
+Troubleshooting activates implicitly for a concrete software failure. It reproduces the mismatch through the real interface, tests competing hypotheses, distinguishes evidence from inference, and proposes a corrective slice. It remains diagnosis-only and waits for approval before any implementation change, even when the original request asked for a fix.
 
 ## Repository layout
 

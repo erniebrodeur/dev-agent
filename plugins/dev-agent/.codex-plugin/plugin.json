@@ -1,6 +1,6 @@
 {
   "name": "dev-agent",
-  "version": "0.1.0+codex.20260808030029",
+  "version": "0.1.0+codex.20260808034628",
   "description": "Reusable development workflows for Codex.",
   "author": {
     "name": "Dev Agent contributors"
@@ -17,7 +17,8 @@
       "Project policy installation",
       "Project context recovery",
       "Conversational implementation planning",
-      "Approved slice implementation"
+      "Approved slice implementation",
+      "Evidence-driven failure diagnosis"
     ],
     "defaultPrompt": "Help me develop software with Dev Agent."
   }
