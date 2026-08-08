@@ -15,6 +15,7 @@ MANIFEST_PATH = PLUGIN_ROOT / ".codex-plugin" / "plugin.json"
 MARKETPLACE_PATH = ROOT / ".agents" / "plugins" / "marketplace.json"
 POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
 ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
+COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -34,6 +35,18 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertTrue(POLICY_PATH.is_file())
         self.assertIn("`../../AGENTS.md`", skill)
         self.assertIn("current task", skill)
+        self.assertIn("allow_implicit_invocation: false", metadata)
+        self.assertNotIn("[TODO:", skill)
+
+    def test_copy_agents_requires_an_approved_semantic_merge(self) -> None:
+        skill = (COPY_AGENTS_ROOT / "SKILL.md").read_text()
+        metadata = (COPY_AGENTS_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("`../../AGENTS.md`", skill)
+        self.assertIn("semantic merge", skill)
+        self.assertIn("complete proposed `AGENTS.md`", skill)
+        self.assertIn("Wait for explicit approval", skill)
+        self.assertIn("will not automatically synchronize", skill)
         self.assertIn("allow_implicit_invocation: false", metadata)
         self.assertNotIn("[TODO:", skill)
 
@@ -68,6 +81,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "AGENTS.md",
                         "skills/activate/SKILL.md",
                         "skills/activate/agents/openai.yaml",
+                        "skills/copy-agents/SKILL.md",
+                        "skills/copy-agents/agents/openai.yaml",
                     ],
                     archive.namelist(),
                 )

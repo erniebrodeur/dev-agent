@@ -13,6 +13,7 @@ The repository and installed plugin have separate responsibilities:
 - `.agents/plugins/marketplace.json` describes the repository-local plugin source.
 - The portable development policy lives at `plugins/dev-agent/AGENTS.md`. Installing the plugin alone does not activate that file in another project.
 - `activate` explicitly loads the installed policy for one task and then reads an existing repository-root `CONVENTIONS.md` as the customization layer.
+- `copy-agents` proposes a semantic merge into the repository-root `AGENTS.md` and writes only after approval of the exact result.
 
 Do not make installed skills depend on repository-root development documents. `activate` resolves the portable policy relative to its installed skill directory.
 

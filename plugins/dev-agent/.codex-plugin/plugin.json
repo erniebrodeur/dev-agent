@@ -12,7 +12,10 @@
     "longDescription": "Dev Agent packages reusable workflows for discussing, implementing, verifying, and releasing software changes.",
     "developerName": "Dev Agent contributors",
     "category": "Productivity",
-    "capabilities": ["Development policy activation"],
+    "capabilities": [
+      "Development policy activation",
+      "Project policy installation"
+    ],
     "defaultPrompt": "Help me develop software with Dev Agent."
   }
 }
