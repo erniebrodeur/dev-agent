@@ -1,0 +1,6 @@
+interface:
+  display_name: "Planning"
+  short_description: "Develop direction into approved implementation slices"
+  default_prompt: "Use $planning to develop this direction into approved implementation slices."
+policy:
+  allow_implicit_invocation: true

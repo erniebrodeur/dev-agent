@@ -17,6 +17,7 @@ POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
 ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
 RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
+PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -61,6 +62,21 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("Be willing to create `CURRENT_WORK.md`", policy)
         self.assertIn("tracked or ignored", policy)
         self.assertIn("wait for approval before writing", policy)
+
+    def test_planning_is_an_implicit_conversational_loop(self) -> None:
+        skill = (PLANNING_ROOT / "SKILL.md").read_text()
+        metadata = (PLANNING_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("no approved implementation slice", skill)
+        self.assertIn("`../recover-project-context/SKILL.md`", skill)
+        self.assertIn("CURRENT_WORK.md", skill)
+        self.assertIn("provisional", skill)
+        self.assertIn("settled", skill)
+        self.assertIn("correction", skill)
+        self.assertIn("explicit approval", skill)
+        self.assertIn("Do not implement", skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
 
     def test_copy_agents_requires_an_approved_semantic_merge(self) -> None:
         skill = (COPY_AGENTS_ROOT / "SKILL.md").read_text()
@@ -107,6 +123,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/activate/agents/openai.yaml",
                         "skills/copy-agents/SKILL.md",
                         "skills/copy-agents/agents/openai.yaml",
+                        "skills/planning/SKILL.md",
+                        "skills/planning/agents/openai.yaml",
                         "skills/recover-project-context/SKILL.md",
                         "skills/recover-project-context/agents/openai.yaml",
                     ],

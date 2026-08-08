@@ -15,7 +15,8 @@
     "capabilities": [
       "Development policy activation",
       "Project policy installation",
-      "Project context recovery"
+      "Project context recovery",
+      "Conversational implementation planning"
     ],
     "defaultPrompt": "Help me develop software with Dev Agent."
   }
