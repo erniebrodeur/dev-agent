@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+"""Create a deterministic zip archive of the Dev Agent plugin."""
+
+from __future__ import annotations
+
+import argparse
+import tempfile
+import zipfile
+from pathlib import Path
+
+
+ARCHIVE_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
+
+
+def repository_root() -> Path:
+    return Path(__file__).resolve().parent.parent
+
+
+def parse_args() -> argparse.Namespace:
+    root = repository_root()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "output",
+        nargs="?",
+        type=Path,
+        default=root / "dist" / "dev-agent.zip",
+        help="archive path (default: dist/dev-agent.zip)",
+    )
+    return parser.parse_args()
+
+
+def plugin_files(plugin_root: Path) -> list[Path]:
+    return sorted(path for path in plugin_root.rglob("*") if path.is_file())
+
+
+def package(plugin_root: Path, output: Path) -> None:
+    manifest = plugin_root / ".codex-plugin" / "plugin.json"
+    if not manifest.is_file():
+        raise SystemExit(f"missing plugin manifest: {manifest}")
+
+    files = plugin_files(plugin_root)
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    with tempfile.NamedTemporaryFile(dir=output.parent, delete=False) as temporary:
+        temporary_path = Path(temporary.name)
+
+    try:
+        with zipfile.ZipFile(temporary_path, "w", zipfile.ZIP_DEFLATED) as archive:
+            for source in files:
+                relative = source.relative_to(plugin_root)
+                info = zipfile.ZipInfo(relative.as_posix(), ARCHIVE_TIMESTAMP)
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o100644 << 16
+                archive.writestr(info, source.read_bytes())
+        temporary_path.replace(output)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+    print(output)
+
+
+def main() -> None:
+    args = parse_args()
+    package(repository_root() / "plugins" / "dev-agent", args.output.resolve())
+
+
+if __name__ == "__main__":
+    main()

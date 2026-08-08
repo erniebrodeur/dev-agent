@@ -1,0 +1,17 @@
+{
+  "name": "dev-agent",
+  "version": "0.1.0",
+  "description": "Reusable development workflows for Codex.",
+  "author": {
+    "name": "Dev Agent contributors"
+  },
+  "interface": {
+    "displayName": "Dev Agent",
+    "shortDescription": "Disciplined development workflows for Codex.",
+    "longDescription": "Dev Agent packages reusable workflows for discussing, implementing, verifying, and releasing software changes.",
+    "developerName": "Dev Agent contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me develop software with Dev Agent."
+  }
+}
