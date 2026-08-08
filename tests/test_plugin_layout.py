@@ -18,6 +18,7 @@ ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
 RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
 PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
+NEXT_SLICE_ROOT = PLUGIN_ROOT / "skills" / "next-slice"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -86,6 +87,30 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
+    def test_portable_policy_defines_an_implementation_slice(self) -> None:
+        policy = POLICY_PATH.read_text()
+
+        self.assertIn("An implementation slice is", policy)
+        self.assertIn("smallest coherent, independently reviewable unit", policy)
+        self.assertIn("outcome, scope, constraints or invariants, non-goals", policy)
+        self.assertIn("authorization boundary", policy)
+        self.assertIn("Approval authorizes implementation of that slice only", policy)
+
+    def test_next_slice_implements_one_approved_slice(self) -> None:
+        skill = (NEXT_SLICE_ROOT / "SKILL.md").read_text()
+        metadata = (NEXT_SLICE_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("exactly one approved implementation slice", skill)
+        self.assertIn("`../recover-project-context/SKILL.md`", skill)
+        self.assertIn("outcome, scope, constraints or invariants, non-goals", skill)
+        self.assertIn("minor, conventional, and reversible", skill)
+        self.assertIn("Return to planning", skill)
+        self.assertIn("CURRENT_WORK.md", skill)
+        self.assertIn("Do not begin another slice", skill)
+        self.assertIn("Committing, pushing", skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
     def test_copy_agents_requires_an_approved_semantic_merge(self) -> None:
         skill = (COPY_AGENTS_ROOT / "SKILL.md").read_text()
         metadata = (COPY_AGENTS_ROOT / "agents" / "openai.yaml").read_text()
@@ -131,6 +156,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/activate/agents/openai.yaml",
                         "skills/copy-agents/SKILL.md",
                         "skills/copy-agents/agents/openai.yaml",
+                        "skills/next-slice/SKILL.md",
+                        "skills/next-slice/agents/openai.yaml",
                         "skills/planning/SKILL.md",
                         "skills/planning/agents/openai.yaml",
                         "skills/recover-project-context/SKILL.md",

@@ -48,6 +48,8 @@ Avoid singleton abuse, tight coupling, untestability, premature optimization, un
 
 ## Implementation
 
+An implementation slice is the smallest coherent, independently reviewable unit of approved implementation work that achieves one concrete outcome and leaves the project in a valid state. Each slice defines its outcome, scope, constraints or invariants, non-goals, dependencies, and proportional verification expectations. A slice is an authorization boundary, not necessarily a commit, release, deployment, or user-visible feature. Approval authorizes implementation of that slice only; separately controlled actions still require their own authorization.
+
 - Inspect first and preserve unrelated user changes.
 - Make the smallest coherent change that satisfies the approved outcome.
 - Reuse an already running development service when practical. Respect the user's requested execution method.

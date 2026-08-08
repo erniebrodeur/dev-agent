@@ -1,0 +1,29 @@
+---
+name: next-slice
+description: Implement exactly one approved implementation slice and verify its outcome without beginning later work. Use implicitly when the user clearly authorizes implementation of an already-approved slice or explicitly asks to implement the next approved slice. Do not use for unsettled direction, unapproved work, discussion, planning, diagnosis without a fix request, or troubleshooting completed work.
+---
+
+# Next Slice
+
+Implement exactly one approved implementation slice, verify it proportionally, record the result, and stop.
+
+## Workflow
+
+1. Read applicable project instructions and inspect repository evidence relevant to the approved work.
+2. If project context has not been recovered in the current task, read `../recover-project-context/SKILL.md` completely and run its recovery workflow.
+3. Resolve exactly one approved implementation slice from the current conversation and project memory. Identify its outcome, scope, constraints or invariants, non-goals, dependencies, and verification expectations before editing.
+4. If no slice is approved, the selected slice is ambiguous, or a material product, public-interface, ownership, workaround, or scope decision remains unresolved, stop. Return to planning or ask for the required user decision rather than choosing silently.
+5. Inspect the relevant implementation, tests, documentation, and working tree. Preserve unrelated user changes and identify the smallest coherent change that can complete the slice.
+6. Implement the slice. Use tests to drive observable behavior where practical. Settle details during implementation only when they are minor, conventional, and reversible and do not constrain later decisions.
+7. Run focused verification first, followed by broader checks only when justified by the change's risk. Diagnose ordinary failures within the slice, but do not add a workaround or expand scope without explicit approval.
+8. Update relevant durable documentation and `CURRENT_WORK.md` to reflect the actual result, including incomplete work, failed verification, remaining risks, and the next planned slice. Do not claim completion unless the approved outcome and required verification are satisfied.
+9. Report the completed outcome, changed areas, verification performed, anything not verified, and the next planned work. Then stop.
+
+## Boundaries
+
+- Do not begin another slice, even when it appears small or closely related.
+- Do not reinterpret a discussion, plan, diagnosis, or vague request to continue as implementation authorization.
+- Do not broaden the approved outcome to include adjacent cleanup, speculative capabilities, refactors, or follow-up fixes.
+- Do not silently work around a root cause or unresolved constraint. Explain the proposed workaround and wait for approval.
+- Committing, pushing, opening a pull request, deploying, publishing, messaging others, destructive operations, and other separately controlled actions remain outside this skill unless the user authorizes them explicitly.
+- Preserve unrelated working-tree changes and report any conflict that prevents a safe implementation.
