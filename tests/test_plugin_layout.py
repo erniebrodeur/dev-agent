@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parent.parent
 PLUGIN_ROOT = ROOT / "plugins" / "dev-agent"
 MANIFEST_PATH = PLUGIN_ROOT / ".codex-plugin" / "plugin.json"
 MARKETPLACE_PATH = ROOT / ".agents" / "plugins" / "marketplace.json"
+POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
+ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -21,9 +23,19 @@ class PluginLayoutTests(unittest.TestCase):
 
         self.assertEqual(PLUGIN_ROOT.name, manifest["name"])
         self.assertEqual("0.1.0", manifest["version"])
-        self.assertNotIn("skills", manifest)
+        self.assertEqual("./skills/", manifest["skills"])
         self.assertNotIn("apps", manifest)
         self.assertNotIn("mcpServers", manifest)
+
+    def test_activate_is_explicit_and_loads_canonical_policy(self) -> None:
+        skill = (ACTIVATE_ROOT / "SKILL.md").read_text()
+        metadata = (ACTIVATE_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertTrue(POLICY_PATH.is_file())
+        self.assertIn("`../../AGENTS.md`", skill)
+        self.assertIn("current task", skill)
+        self.assertIn("allow_implicit_invocation: false", metadata)
+        self.assertNotIn("[TODO:", skill)
 
     def test_marketplace_points_to_plugin(self) -> None:
         marketplace = json.loads(MARKETPLACE_PATH.read_text())
@@ -50,7 +62,15 @@ class PluginLayoutTests(unittest.TestCase):
                 hashlib.sha256(second.read_bytes()).digest(),
             )
             with zipfile.ZipFile(first) as archive:
-                self.assertEqual([".codex-plugin/plugin.json"], archive.namelist())
+                self.assertEqual(
+                    [
+                        ".codex-plugin/plugin.json",
+                        "AGENTS.md",
+                        "skills/activate/SKILL.md",
+                        "skills/activate/agents/openai.yaml",
+                    ],
+                    archive.namelist(),
+                )
 
 
 if __name__ == "__main__":

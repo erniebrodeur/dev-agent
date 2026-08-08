@@ -5,13 +5,14 @@
   "author": {
     "name": "Dev Agent contributors"
   },
+  "skills": "./skills/",
   "interface": {
     "displayName": "Dev Agent",
     "shortDescription": "Disciplined development workflows for Codex.",
     "longDescription": "Dev Agent packages reusable workflows for discussing, implementing, verifying, and releasing software changes.",
     "developerName": "Dev Agent contributors",
     "category": "Productivity",
-    "capabilities": [],
+    "capabilities": ["Development policy activation"],
     "defaultPrompt": "Help me develop software with Dev Agent."
   }
 }

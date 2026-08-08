@@ -42,6 +42,8 @@ temp/
 CURRENT_WORK.md
 
 # Dependency and build output
+__pycache__/
+*.py[cod]
 node_modules/
 vendor/
 dist/
