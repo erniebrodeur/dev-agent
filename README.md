@@ -12,6 +12,8 @@ After installing the plugin, invoke:
 $activate
 ```
 
+You can also select the Dev Agent plugin and ask it to activate. Activation remains opt-in, but the skill permits natural-language matching instead of requiring the `$activate` mention form.
+
 Activation loads the policy shipped with the installed plugin for the current task, applies an existing root `CONVENTIONS.md`, and recovers the repository's current state. It does not modify the repository, install hooks, or create persistent configuration without separate approval.
 
 To propose installing the policy as the active project's durable `AGENTS.md`, invoke:

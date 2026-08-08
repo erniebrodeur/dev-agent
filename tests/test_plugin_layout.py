@@ -46,7 +46,7 @@ class PluginLayoutTests(unittest.TestCase):
             manifest["interface"]["capabilities"],
         )
 
-    def test_activate_is_explicit_and_loads_canonical_policy(self) -> None:
+    def test_activate_matches_activation_requests_and_loads_canonical_policy(self) -> None:
         skill = (ACTIVATE_ROOT / "SKILL.md").read_text()
         metadata = (ACTIVATE_ROOT / "agents" / "openai.yaml").read_text()
 
@@ -57,9 +57,11 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("Do not report Dev Agent as active", skill)
         self.assertIn("mandatory and blocking", skill)
         self.assertIn("Do not defer project-context recovery", skill)
+        self.assertIn("asks to activate Dev Agent", skill)
+        self.assertIn("selects the Dev Agent plugin", skill)
         self.assertIn("context recovery is complete", metadata)
         self.assertIn("current task", skill)
-        self.assertIn("allow_implicit_invocation: false", metadata)
+        self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
     def test_recover_context_is_implicit_and_verifies_project_state(self) -> None:

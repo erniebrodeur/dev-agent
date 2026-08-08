@@ -1,6 +1,6 @@
 {
   "name": "dev-agent",
-  "version": "0.1.0+codex.20260808174009",
+  "version": "0.1.0+codex.20260808180519",
   "description": "Reusable development workflows for Codex.",
   "author": {
     "name": "Dev Agent contributors"

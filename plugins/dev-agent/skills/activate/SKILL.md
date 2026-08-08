@@ -1,6 +1,6 @@
 ---
 name: activate
-description: Load the installed Dev Agent development policy and recover the active project's current state for the current task without changing repository files or persistent configuration. Use only when the user explicitly invokes `$activate` or explicitly asks to activate Dev Agent for the current task.
+description: Activate Dev Agent for the current task by loading its installed development policy and recovering the active project's current state without changing repository files or persistent configuration. Use when the user invokes `$activate`, asks to activate Dev Agent, or selects the Dev Agent plugin and requests activation.
 ---
 
 # Activate
