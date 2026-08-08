@@ -1,0 +1,6 @@
+interface:
+  display_name: "Copy Pilot Policy"
+  short_description: "Install policy into a project AGENTS.md"
+  default_prompt: "Use $copy-agents to propose installing Pilot policy in this project."
+policy:
+  allow_implicit_invocation: false

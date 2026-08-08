@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PLUGIN_ROOT = ROOT / "plugins" / "dev-agent"
+PLUGIN_ROOT = ROOT / "plugins" / "pilot"
 MANIFEST_PATH = PLUGIN_ROOT / ".codex-plugin" / "plugin.json"
 MARKETPLACE_PATH = ROOT / ".agents" / "plugins" / "marketplace.json"
 POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
@@ -54,11 +54,11 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("`../../AGENTS.md`", skill)
         self.assertIn("`../recover-project-context/SKILL.md`", skill)
         self.assertIn("Activation is incomplete until", skill)
-        self.assertIn("Do not report Dev Agent as active", skill)
+        self.assertIn("Do not report Pilot as active", skill)
         self.assertIn("mandatory and blocking", skill)
         self.assertIn("Do not defer project-context recovery", skill)
-        self.assertIn("asks to activate Dev Agent", skill)
-        self.assertIn("selects the Dev Agent plugin", skill)
+        self.assertIn("asks to activate Pilot", skill)
+        self.assertIn("selects the Pilot plugin", skill)
         self.assertIn("context recovery is complete", metadata)
         self.assertIn("current task", skill)
         self.assertIn("allow_implicit_invocation: true", metadata)
@@ -71,7 +71,7 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("CURRENT_WORK.md", skill)
         self.assertIn("surface-scan", skill)
         self.assertIn("deep-scan", skill)
-        self.assertIn("Dev Agent convention", skill)
+        self.assertIn("Pilot convention", skill)
         self.assertIn("project scratch pad", skill)
         self.assertIn("not a standard development artifact", skill)
         self.assertIn("Ask whether the user wants", skill)
@@ -216,11 +216,11 @@ class PluginLayoutTests(unittest.TestCase):
 
     def test_marketplace_points_to_plugin(self) -> None:
         marketplace = json.loads(MARKETPLACE_PATH.read_text())
-        entries = [entry for entry in marketplace["plugins"] if entry["name"] == "dev-agent"]
+        entries = [entry for entry in marketplace["plugins"] if entry["name"] == "pilot"]
 
         self.assertEqual(1, len(entries))
         self.assertEqual(
-            {"source": "local", "path": "./plugins/dev-agent"},
+            {"source": "local", "path": "./plugins/pilot"},
             entries[0]["source"],
         )
         self.assertEqual("AVAILABLE", entries[0]["policy"]["installation"])

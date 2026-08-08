@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a deterministic zip archive of the Dev Agent plugin."""
+"""Create a deterministic zip archive of the Pilot plugin."""
 
 from __future__ import annotations
 
@@ -23,8 +23,8 @@ def parse_args() -> argparse.Namespace:
         "output",
         nargs="?",
         type=Path,
-        default=root / "dist" / "dev-agent.zip",
-        help="archive path (default: dist/dev-agent.zip)",
+        default=root / "dist" / "pilot.zip",
+        help="archive path (default: dist/pilot.zip)",
     )
     return parser.parse_args()
 
@@ -61,7 +61,7 @@ def package(plugin_root: Path, output: Path) -> None:
 
 def main() -> None:
     args = parse_args()
-    package(repository_root() / "plugins" / "dev-agent", args.output.resolve())
+    package(repository_root() / "plugins" / "pilot", args.output.resolve())
 
 
 if __name__ == "__main__":

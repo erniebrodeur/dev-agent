@@ -1,10 +1,10 @@
-# Dev Agent policy
+# Pilot policy
 
 ## Scope and precedence
 
-Apply this policy to the current task when Dev Agent is active or when a project has adopted it. Continue to follow higher-priority platform, developer, user, and project instructions.
+Apply this policy to the current task when Pilot is active or when a project has adopted it. Continue to follow higher-priority platform, developer, user, and project instructions.
 
-When the installed Dev Agent policy is explicitly activated, use it instead of an identifiable older copied Dev Agent baseline for the current task. Preserve unrelated project-specific instructions. Read a repository-root `CONVENTIONS.md` after this policy when it exists. Treat supported conventions as project preferences that may override Dev Agent defaults, but not higher-priority safety, authorization, or platform requirements.
+When the installed Pilot policy is explicitly activated, use it instead of an identifiable older copied Pilot baseline for the current task. Preserve unrelated project-specific instructions. Read a repository-root `CONVENTIONS.md` after this policy when it exists. Treat supported conventions as project preferences that may override Pilot defaults, but not higher-priority safety, authorization, or platform requirements.
 
 ## Authorization
 
@@ -70,7 +70,7 @@ An implementation slice is the smallest coherent, independently reviewable unit 
 
 - Keep mandatory operating rules, durable internal rationale, active scratch work, public documentation, personal data, and saved external research in their appropriate artifacts.
 - Treat `CURRENT_WORK.md`, when present and defined by the project as such, as mutable working context rather than an automatic design authority.
-- Be willing to create `CURRENT_WORK.md` when a context-recovery workflow would benefit from a project scratch pad. When it is absent, recover the project state first and explain that the file is a Dev Agent convention for mutable working context rather than a standard development artifact or design authority. Ask whether the user wants the file, and only after acceptance ask whether it should be tracked or ignored.
+- Be willing to create `CURRENT_WORK.md` when a context-recovery workflow would benefit from a project scratch pad. When it is absent, recover the project state first and explain that the file is a Pilot convention for mutable working context rather than a standard development artifact or design authority. Ask whether the user wants the file, and only after acceptance ask whether it should be tracked or ignored.
 - Explain that tracked project memory is shared and reviewable, while ignored project memory is local and better suited to temporary, personal, or noisy context. Inspect existing ignore rules, show the proposed checkpoint and any ignore-rule change, and wait for approval before writing.
 - Keep personal data and sensitive material out of tracked project memory.
 - Do not otherwise create or rewrite project-memory files unless the request or established project workflow calls for it.

@@ -1,16 +1,16 @@
 {
-  "name": "dev-agent",
-  "version": "0.1.0+codex.20260808180519",
+  "name": "pilot",
+  "version": "0.1.0+codex.20260808181800",
   "description": "Reusable development workflows for Codex.",
   "author": {
-    "name": "Dev Agent contributors"
+    "name": "Pilot contributors"
   },
   "skills": "./skills/",
   "interface": {
-    "displayName": "Dev Agent",
+    "displayName": "Pilot",
     "shortDescription": "Disciplined development workflows for Codex.",
-    "longDescription": "Dev Agent packages reusable workflows for discussing, implementing, verifying, and releasing software changes.",
-    "developerName": "Dev Agent contributors",
+    "longDescription": "Pilot packages reusable workflows for discussing, implementing, verifying, and releasing software changes.",
+    "developerName": "Pilot contributors",
     "category": "Productivity",
     "capabilities": [
       "Development policy activation",
@@ -23,6 +23,6 @@
       "Evidence-driven failure diagnosis",
       "User-authorized Semgrep security analysis"
     ],
-    "defaultPrompt": "Help me develop software with Dev Agent."
+    "defaultPrompt": "Help me develop software with Pilot."
   }
 }

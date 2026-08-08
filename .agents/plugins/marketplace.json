@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "dev-agent",
+      "name": "pilot",
       "source": {
         "source": "local",
-        "path": "./plugins/dev-agent"
+        "path": "./plugins/pilot"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -1,6 +1,0 @@
-interface:
-  display_name: "Activate Dev Agent"
-  short_description: "Load policy and recover project context"
-  default_prompt: "Use $activate to load Dev Agent policy, recover this project's current state, and report activation only after context recovery is complete."
-policy:
-  allow_implicit_invocation: true
