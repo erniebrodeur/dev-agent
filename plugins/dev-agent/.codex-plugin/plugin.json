@@ -14,7 +14,8 @@
     "category": "Productivity",
     "capabilities": [
       "Development policy activation",
-      "Project policy installation"
+      "Project policy installation",
+      "Project context recovery"
     ],
     "defaultPrompt": "Help me develop software with Dev Agent."
   }

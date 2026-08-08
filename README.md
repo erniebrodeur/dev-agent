@@ -12,7 +12,7 @@ After installing the plugin, invoke:
 $activate
 ```
 
-Activation loads the policy shipped with the installed plugin for the current task. It does not modify the repository, install hooks, or create persistent configuration. If the active repository contains a root `CONVENTIONS.md`, activation loads it as the project customization layer.
+Activation loads the policy shipped with the installed plugin for the current task, applies an existing root `CONVENTIONS.md`, and recovers the repository's current state. It does not modify the repository, install hooks, or create persistent configuration without separate approval.
 
 To propose installing the policy as the active project's durable `AGENTS.md`, invoke:
 
@@ -21,6 +21,8 @@ $copy-agents
 ```
 
 The skill inspects existing instructions, proposes a semantic merge, and waits for approval of the exact result before writing. The copied policy becomes project-owned and does not automatically synchronize with plugin updates.
+
+Project context recovery also activates implicitly for requests such as “where are we?”, “resume,” or “what is next?” It verifies an existing root `CURRENT_WORK.md` against repository evidence. `CURRENT_WORK.md` is a Dev Agent convention for a mutable project scratch pad rather than a standard development artifact or design authority. Without that file, recovery performs a deeper scan, explains the convention, and offers to create either tracked or ignored project memory after reporting its findings.
 
 ## Repository layout
 

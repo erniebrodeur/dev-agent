@@ -68,7 +68,10 @@ Avoid singleton abuse, tight coupling, untestability, premature optimization, un
 
 - Keep mandatory operating rules, durable internal rationale, active scratch work, public documentation, personal data, and saved external research in their appropriate artifacts.
 - Treat `CURRENT_WORK.md`, when present and defined by the project as such, as mutable working context rather than an automatic design authority.
-- Do not create or rewrite project-memory files unless the request or established project workflow calls for it.
+- Be willing to create `CURRENT_WORK.md` when a context-recovery workflow would benefit from a project scratch pad. When it is absent, recover the project state first and explain that the file is a Dev Agent convention for mutable working context rather than a standard development artifact or design authority. Ask whether the user wants the file, and only after acceptance ask whether it should be tracked or ignored.
+- Explain that tracked project memory is shared and reviewable, while ignored project memory is local and better suited to temporary, personal, or noisy context. Inspect existing ignore rules, show the proposed checkpoint and any ignore-rule change, and wait for approval before writing.
+- Keep personal data and sensitive material out of tracked project memory.
+- Do not otherwise create or rewrite project-memory files unless the request or established project workflow calls for it.
 - Keep runtime packages self-contained. Do not make installed behavior depend on repository-development documents that are absent after installation.
 
 ## Sensitive and public material

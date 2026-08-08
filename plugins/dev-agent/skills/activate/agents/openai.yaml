@@ -1,6 +1,6 @@
 interface:
   display_name: "Activate Dev Agent"
-  short_description: "Load Dev Agent policy for this task"
-  default_prompt: "Use $activate to load Dev Agent policy for this task."
+  short_description: "Load policy and recover project context"
+  default_prompt: "Use $activate to load Dev Agent policy and recover this project's current state."
 policy:
   allow_implicit_invocation: false

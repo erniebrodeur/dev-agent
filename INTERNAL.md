@@ -14,6 +14,8 @@ The repository and installed plugin have separate responsibilities:
 - The portable development policy lives at `plugins/dev-agent/AGENTS.md`. Installing the plugin alone does not activate that file in another project.
 - `activate` explicitly loads the installed policy for one task and then reads an existing repository-root `CONVENTIONS.md` as the customization layer.
 - `copy-agents` proposes a semantic merge into the repository-root `AGENTS.md` and writes only after approval of the exact result.
+- `recover-project-context` restores project state implicitly from recovery intent and runs whenever `activate` is invoked. It verifies `CURRENT_WORK.md` with a surface scan or performs a deep repository scan when no checkpoint exists.
+- Conversation-mode detection, implementation authorization, and question-versus-assumption discipline remain ambient policy behavior rather than a standalone skill.
 
 Do not make installed skills depend on repository-root development documents. `activate` resolves the portable policy relative to its installed skill directory.
 
@@ -29,3 +31,11 @@ Do not make installed skills depend on repository-root development documents. `a
 Build the plugin skeleton first, then `activate`, followed by one complete slice per approved skill. Each skill slice owns its runtime metadata, instructions, focused tests, and relevant documentation. Do not create empty resource directories for planned capabilities.
 
 Prefer instruction-only skills. Add runtime scripts, assets, hooks, MCP servers, or apps only when an approved skill demonstrates a concrete need.
+
+### Why conversation-gate is not a skill
+
+A standalone skill should own a recognizable user trigger and produce a concrete outcome. Conversation gating does neither. It is baseline conduct that must already be active when the agent interprets whether a request is discussion, planning, documentation, diagnosis, or authorization to implement.
+
+Explicit invocation would require the user to request the safeguard after it was already needed. Implicit invocation would load it across ordinary development turns, duplicate the portable policy, and spend context without adding a distinct workflow. The proposed responsibility to preserve a current mode is also misleading because authorization is inferred from the active conversation and instruction hierarchy, not maintained as durable lifecycle state.
+
+The behavior therefore remains in the portable policy's authorization and questions-and-assumptions sections. Other skills may rely on that shared decision boundary, but should not repeat or claim ownership of it. `conversation-gate` is rejected as a standalone candidate.

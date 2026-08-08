@@ -16,6 +16,7 @@ MARKETPLACE_PATH = ROOT / ".agents" / "plugins" / "marketplace.json"
 POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
 ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
+RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -34,9 +35,32 @@ class PluginLayoutTests(unittest.TestCase):
 
         self.assertTrue(POLICY_PATH.is_file())
         self.assertIn("`../../AGENTS.md`", skill)
+        self.assertIn("`../recover-project-context/SKILL.md`", skill)
         self.assertIn("current task", skill)
         self.assertIn("allow_implicit_invocation: false", metadata)
         self.assertNotIn("[TODO:", skill)
+
+    def test_recover_context_is_implicit_and_verifies_project_state(self) -> None:
+        skill = (RECOVER_CONTEXT_ROOT / "SKILL.md").read_text()
+        metadata = (RECOVER_CONTEXT_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("CURRENT_WORK.md", skill)
+        self.assertIn("surface-scan", skill)
+        self.assertIn("deep-scan", skill)
+        self.assertIn("Dev Agent convention", skill)
+        self.assertIn("project scratch pad", skill)
+        self.assertIn("not a standard development artifact", skill)
+        self.assertIn("Ask whether the user wants", skill)
+        self.assertIn("tracked or ignored", skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
+    def test_portable_policy_supports_current_work_creation(self) -> None:
+        policy = POLICY_PATH.read_text()
+
+        self.assertIn("Be willing to create `CURRENT_WORK.md`", policy)
+        self.assertIn("tracked or ignored", policy)
+        self.assertIn("wait for approval before writing", policy)
 
     def test_copy_agents_requires_an_approved_semantic_merge(self) -> None:
         skill = (COPY_AGENTS_ROOT / "SKILL.md").read_text()
@@ -83,6 +107,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/activate/agents/openai.yaml",
                         "skills/copy-agents/SKILL.md",
                         "skills/copy-agents/agents/openai.yaml",
+                        "skills/recover-project-context/SKILL.md",
+                        "skills/recover-project-context/agents/openai.yaml",
                     ],
                     archive.namelist(),
                 )
