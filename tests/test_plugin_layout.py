@@ -17,6 +17,7 @@ POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
 ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 COMMIT_ROOT = PLUGIN_ROOT / "skills" / "commit"
 COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
+GIT_STATUS_ROOT = PLUGIN_ROOT / "skills" / "git-status"
 RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
 PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
 NEXT_SLICE_ROOT = PLUGIN_ROOT / "skills" / "next-slice"
@@ -38,6 +39,10 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertNotIn("mcpServers", manifest)
         self.assertIn(
             "Two-phase local commit preparation and approval",
+            manifest["interface"]["capabilities"],
+        )
+        self.assertIn(
+            "Reusable read-only Git status reporting",
             manifest["interface"]["capabilities"],
         )
 
@@ -135,6 +140,26 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
+    def test_git_status_reports_reusable_read_only_state(self) -> None:
+        skill = (GIT_STATUS_ROOT / "SKILL.md").read_text()
+        metadata = (GIT_STATUS_ROOT / "agents" / "openai.yaml").read_text()
+        commit_skill = (COMMIT_ROOT / "SKILL.md").read_text()
+
+        self.assertIn("read-only", skill)
+        self.assertIn("active branch", skill)
+        self.assertIn("detached HEAD", skill)
+        self.assertIn("unborn branch", skill)
+        self.assertIn("merge or rebase", skill)
+        self.assertIn("upstream", skill)
+        self.assertIn("local tracking refs", skill)
+        self.assertIn("staged, unstaged, and untracked", skill)
+        self.assertIn("Do not fetch", skill)
+        self.assertIn("Do not reproduce", skill)
+        self.assertIn("`../git-status/SKILL.md`", commit_skill)
+        self.assertIn("mandatory first step", commit_skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
     def test_troubleshoot_diagnoses_and_waits_before_correction(self) -> None:
         skill = (TROUBLESHOOT_ROOT / "SKILL.md").read_text()
         metadata = (TROUBLESHOOT_ROOT / "agents" / "openai.yaml").read_text()
@@ -222,6 +247,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/commit/agents/openai.yaml",
                         "skills/copy-agents/SKILL.md",
                         "skills/copy-agents/agents/openai.yaml",
+                        "skills/git-status/SKILL.md",
+                        "skills/git-status/agents/openai.yaml",
                         "skills/next-slice/SKILL.md",
                         "skills/next-slice/agents/openai.yaml",
                         "skills/planning/SKILL.md",

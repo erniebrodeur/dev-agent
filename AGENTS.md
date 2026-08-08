@@ -50,6 +50,12 @@ Use dependency and abstraction judgment rather than a blanket NIH rule:
 - Fix root causes at the layer that owns them. Any workaround requires the user's explicit approval after its constraints and tradeoffs are explained.
 - Detect and reuse an already running development service when practical instead of starting a duplicate. Respect the user's requested execution method, including use of a plugin or agent-managed service.
 
+## Skill boundaries
+
+- Create skills for workflows that should repeat predictably across tasks or that own meaningful authorization boundaries, not as wrappers for individual commands.
+- Prioritize consistent steps in the main planning, implementation, and commit loop, plus explicit gates for actions such as committing or publishing.
+- Leave ordinary contextual operations to agent judgment unless repeated evidence establishes a stable workflow with a distinct user job.
+
 ## Personal data
 
 - Do not commit, publish, or reproduce personal data unless the user explicitly approves the exact content for public release.

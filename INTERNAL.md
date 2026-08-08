@@ -17,6 +17,7 @@ The repository and installed plugin have separate responsibilities:
 - `recover-project-context` restores project state implicitly from recovery intent and runs whenever `activate` is invoked. It verifies `CURRENT_WORK.md` with a surface scan or performs a deep repository scan when no checkpoint exists.
 - `planning` activates implicitly when direction is unsettled or no approved implementation slice exists. It runs an evidence-based conversational loop, keeps `CURRENT_WORK.md` current, and produces approved implementation slices without executing them.
 - `next-slice` activates implicitly after clear implementation authorization. It resolves exactly one approved slice, best-effort renames the current task from the slice outcome before editing, implements the slice, verifies it proportionally, updates project memory, and stops before later work.
+- `git-status` provides one concise, read-only owner for repeated Git-state inspection. It reports locally known branch, upstream, divergence, worktree, and current-work state without fetching or performing branch management, and it is the mandatory first step of `commit`.
 - `commit` activates for local commit requests and enforces two authorization phases. The first phase resolves scope, verifies, stages, inspects, and proposes the exact commit. A later approval permits that exact commit after a drift check. It never pushes implicitly.
 - `troubleshoot` activates implicitly for concrete failures. It reproduces the mismatch, tests competing hypotheses, reports confidence and uncertainty, proposes a corrective slice, and waits without editing implementation files.
 - `security-check` runs only after user authorization. It uses required Semgrep analysis in partial mode over files changed by the relevant work or comprehensive mode over the applicable repository, supplements it with convention-required tools, reports incomplete coverage, and waits before correction.
@@ -36,6 +37,8 @@ Do not make installed skills depend on repository-root development documents. `a
 Build the plugin skeleton first, then `activate`, followed by one complete slice per approved skill. Each skill slice owns its runtime metadata, instructions, focused tests, and relevant documentation. Do not create empty resource directories for planned capabilities.
 
 Prefer instruction-only skills. Add runtime scripts, assets, hooks, MCP servers, or apps only when an approved skill demonstrates a concrete need.
+
+Create skills for workflows that need consistent repetition or meaningful authorization boundaries, not for individual commands. Ordinary contextual operations remain agent decisions unless repeated evidence establishes a distinct workflow.
 
 ### Why conversation-gate is not a skill
 

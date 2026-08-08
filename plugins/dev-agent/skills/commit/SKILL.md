@@ -13,7 +13,7 @@ A request to commit, including a direct instruction such as `commit`, authorizes
 
 ## Preparation phase
 
-1. Read applicable project instructions. Inspect the active branch, upstream relationship, staged, unstaged, and untracked changes, and the commits or diff relevant to the current work.
+1. Read applicable project instructions, then read `../git-status/SKILL.md` completely and run it as the mandatory first step. Use its report as the single Git-state baseline for the preparation phase.
 2. Resolve the intended change set from the request, current work, and repository evidence. Preserve unrelated changes. If scope is ambiguous or unrelated changes are already staged, stop and ask before modifying the index.
 3. Run or confirm proportional verification for the intended changes. Report any relevant verification that is incomplete or failing rather than concealing it.
 4. Review the intended content, then stage only the intended files with explicit paths. Include deletions only when they are clearly in scope. Do not use a broad staging command while scope is unresolved.
