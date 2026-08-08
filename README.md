@@ -26,7 +26,7 @@ Project context recovery also activates implicitly for requests such as “where
 
 Planning activates implicitly when software direction is unsettled or no approved implementation slice exists. It uses repository evidence and a conversational correction loop to resolve major decisions, maintain `CURRENT_WORK.md`, and produce an approved sequence of implementation slices without implementing them.
 
-After the user clearly authorizes an approved slice, `next-slice` implements exactly that slice, verifies it proportionally, updates project memory, and stops. A slice is a coherent, independently reviewable unit of work and an implementation authorization boundary, not necessarily a commit, release, or deployment.
+After the user clearly authorizes an approved slice, `next-slice` resolves that slice, gives the current task a concise title based on its outcome when the host supports task renaming, implements exactly the slice, verifies it proportionally, updates project memory, and stops. Task renaming is best-effort and never blocks implementation. A slice is a coherent, independently reviewable unit of work and an implementation authorization boundary, not necessarily a commit, release, or deployment.
 
 Troubleshooting activates implicitly for a concrete software failure. It reproduces the mismatch through the real interface, tests competing hypotheses, distinguishes evidence from inference, and proposes a corrective slice. It remains diagnosis-only and waits for approval before any implementation change, even when the original request asked for a fix.
 

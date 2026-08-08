@@ -13,11 +13,12 @@ Implement exactly one approved implementation slice, verify it proportionally, r
 2. If project context has not been recovered in the current task, read `../recover-project-context/SKILL.md` completely and run its recovery workflow.
 3. Resolve exactly one approved implementation slice from the current conversation and project memory. Identify its outcome, scope, constraints or invariants, non-goals, dependencies, and verification expectations before editing.
 4. If no slice is approved, the selected slice is ambiguous, or a material product, public-interface, ownership, workaround, or scope decision remains unresolved, stop. Return to planning or ask for the required user decision rather than choosing silently.
-5. Inspect the relevant implementation, tests, documentation, and working tree. Preserve unrelated user changes and identify the smallest coherent change that can complete the slice.
-6. Implement the slice. Use tests to drive observable behavior where practical. Settle details during implementation only when they are minor, conventional, and reversible and do not constrain later decisions.
-7. Run focused verification first, followed by broader checks only when justified by the change's risk. Diagnose ordinary failures within the slice, but do not add a workaround or expand scope without explicit approval.
-8. Update relevant durable documentation and `CURRENT_WORK.md` to reflect the actual result, including incomplete work, failed verification, remaining risks, and the next planned slice. Do not claim completion unless the approved outcome and required verification are satisfied.
-9. Report the completed outcome, changed areas, verification performed, anything not verified, and the next planned work. Then stop.
+5. Derive a concise task title from the approved slice's outcome and rename the current task through the host's task-title capability before editing. Prefer the concrete outcome over a generic workflow label. If the capability is unavailable or the rename fails, report the limitation and continue; task naming does not block implementation.
+6. Inspect the relevant implementation, tests, documentation, and working tree. Preserve unrelated user changes and identify the smallest coherent change that can complete the slice.
+7. Implement the slice. Use tests to drive observable behavior where practical. Settle details during implementation only when they are minor, conventional, and reversible and do not constrain later decisions.
+8. Run focused verification first, followed by broader checks only when justified by the change's risk. Diagnose ordinary failures within the slice, but do not add a workaround or expand scope without explicit approval.
+9. Update relevant durable documentation and `CURRENT_WORK.md` to reflect the actual result, including incomplete work, failed verification, remaining risks, and the next planned slice. Do not claim completion unless the approved outcome and required verification are satisfied.
+10. Report the completed outcome, changed areas, verification performed, anything not verified, and the next planned work. Then stop.
 
 ## Boundaries
 
