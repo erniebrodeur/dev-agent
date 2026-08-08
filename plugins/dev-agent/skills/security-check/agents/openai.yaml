@@ -1,0 +1,11 @@
+interface:
+  display_name: "Security Check"
+  short_description: "Run an evidence-based Semgrep security review"
+  default_prompt: "Use $security-check to run a comprehensive security check and report findings without applying fixes."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "semgrep"
+      description: "Semgrep MCP server for required security scans"
+policy:
+  allow_implicit_invocation: true

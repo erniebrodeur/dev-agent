@@ -20,6 +20,7 @@ RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
 PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
 NEXT_SLICE_ROOT = PLUGIN_ROOT / "skills" / "next-slice"
 TROUBLESHOOT_ROOT = PLUGIN_ROOT / "skills" / "troubleshoot"
+SECURITY_CHECK_ROOT = PLUGIN_ROOT / "skills" / "security-check"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -131,6 +132,27 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
+    def test_security_check_is_user_authorized_and_semgrep_required(self) -> None:
+        skill = (SECURITY_CHECK_ROOT / "SKILL.md").read_text()
+        metadata = (SECURITY_CHECK_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("partial mode", skill)
+        self.assertIn("only files changed by the relevant", skill)
+        self.assertIn("comprehensive mode", skill)
+        self.assertIn("without narrowing its scope", skill)
+        self.assertIn("must not run one automatically", skill)
+        self.assertIn("Semgrep is mandatory in both modes", skill)
+        self.assertIn("in addition to Semgrep, not instead of it", skill)
+        self.assertIn("report the check as incomplete", skill)
+        self.assertIn("severity, and confidence", skill)
+        self.assertIn("false positives", skill)
+        self.assertIn("clean scan does not prove", skill)
+        self.assertIn("corrective slice", skill)
+        self.assertIn("Do not implement a correction", skill)
+        self.assertIn('value: "semgrep"', metadata)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
     def test_copy_agents_requires_an_approved_semantic_merge(self) -> None:
         skill = (COPY_AGENTS_ROOT / "SKILL.md").read_text()
         metadata = (COPY_AGENTS_ROOT / "agents" / "openai.yaml").read_text()
@@ -182,6 +204,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/planning/agents/openai.yaml",
                         "skills/recover-project-context/SKILL.md",
                         "skills/recover-project-context/agents/openai.yaml",
+                        "skills/security-check/SKILL.md",
+                        "skills/security-check/agents/openai.yaml",
                         "skills/troubleshoot/SKILL.md",
                         "skills/troubleshoot/agents/openai.yaml",
                     ],
