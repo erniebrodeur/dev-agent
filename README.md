@@ -2,7 +2,7 @@
 
 Pilot is a Codex plugin for disciplined, evidence-driven software development workflows.
 
-The project is being built as a sequence of independently reviewed slices. The current plugin can activate its portable development policy for one task, install a project-owned copy, recover project context, develop uncertain direction into approved implementation slices, implement one approved slice at a time, turn repeatable procedures into deterministic repository scripts, report reusable read-only Git status, prepare and approve local commits in two phases, diagnose concrete failures before proposing corrections, and run user-authorized Semgrep security checks.
+The project is being built as a sequence of independently reviewed slices. The current plugin can activate its portable development policy for one task, show a canonical capability guide, install a project-owned copy, recover project context, develop uncertain direction into approved implementation slices, implement one approved slice at a time, turn repeatable procedures into deterministic repository scripts, report reusable read-only Git status, prepare and approve local commits in two phases, diagnose concrete failures before proposing corrections, and run user-authorized Semgrep security checks.
 
 ## Use
 
@@ -15,6 +15,8 @@ $activate
 You can also select the Pilot plugin and ask it to activate. Activation remains opt-in, but the skill permits natural-language matching instead of requiring the `$activate` mention form.
 
 Activation loads the policy shipped with the installed plugin for the current task, applies an existing root `CONVENTIONS.md`, and recovers the repository's current state. It does not modify the repository, install hooks, or create persistent configuration without separate approval.
+
+Ask for help while Pilot is active to show its canonical, version-current capability guide. Pilot also responds when the user explicitly asks for Pilot help, but it does not claim generic help requests while inactive.
 
 To propose installing the policy as the active project's durable `AGENTS.md`, invoke:
 

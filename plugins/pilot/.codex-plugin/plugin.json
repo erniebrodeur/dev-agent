@@ -1,6 +1,6 @@
 {
   "name": "pilot",
-  "version": "0.1.0+codex.20260808181801",
+  "version": "0.1.0+codex.20260808182654",
   "description": "Reusable development workflows for Codex.",
   "author": {
     "name": "Pilot contributors"
@@ -22,7 +22,8 @@
       "Two-phase local commit preparation and approval",
       "Evidence-driven failure diagnosis",
       "User-authorized Semgrep security analysis",
-      "Deterministic repository utility creation"
+      "Deterministic repository utility creation",
+      "Canonical capability guidance"
     ],
     "defaultPrompt": "Help me develop software with Pilot."
   }

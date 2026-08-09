@@ -13,6 +13,7 @@ The repository and installed plugin have separate responsibilities:
 - `.agents/plugins/marketplace.json` describes the repository-local plugin source.
 - The portable development policy lives at `plugins/pilot/AGENTS.md`. Installing the plugin alone does not activate that file in another project.
 - `activate` loads the installed policy for one task after an explicit user request, including a natural-language request made through the selected plugin, and then reads an existing repository-root `CONVENTIONS.md` as the customization layer. Its metadata permits implicit skill matching instead of requiring the `$activate` mention form.
+- `help` reproduces one canonical, version-current capability guide when the user explicitly asks for Pilot help or asks for help while Pilot is active for the current task. It does not claim generic help requests while inactive or create persistent activation state.
 - `copy-agents` proposes a semantic merge into the repository-root `AGENTS.md` and writes only after approval of the exact result.
 - `recover-project-context` restores project state implicitly from recovery intent and runs whenever `activate` is invoked. It verifies `CURRENT_WORK.md` with a surface scan or performs a deep repository scan when no checkpoint exists.
 - `planning` activates implicitly when direction is unsettled or no approved implementation slice exists. It runs an evidence-based conversational loop, keeps `CURRENT_WORK.md` current, and produces approved implementation slices without executing them.

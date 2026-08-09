@@ -18,6 +18,7 @@ ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 COMMIT_ROOT = PLUGIN_ROOT / "skills" / "commit"
 COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
 GIT_STATUS_ROOT = PLUGIN_ROOT / "skills" / "git-status"
+HELP_ROOT = PLUGIN_ROOT / "skills" / "help"
 RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
 PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
 NEXT_SLICE_ROOT = PLUGIN_ROOT / "skills" / "next-slice"
@@ -48,6 +49,10 @@ class PluginLayoutTests(unittest.TestCase):
         )
         self.assertIn(
             "Deterministic repository utility creation",
+            manifest["interface"]["capabilities"],
+        )
+        self.assertIn(
+            "Canonical capability guidance",
             manifest["interface"]["capabilities"],
         )
 
@@ -238,6 +243,24 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
+    def test_help_shows_canonical_guidance_only_in_pilot_context(self) -> None:
+        skill = (HELP_ROOT / "SKILL.md").read_text()
+        metadata = (HELP_ROOT / "agents" / "openai.yaml").read_text()
+        guide = (HELP_ROOT / "references" / "help.md").read_text()
+
+        self.assertIn("explicitly asks for Pilot help", skill)
+        self.assertIn("Pilot is already active", skill)
+        self.assertIn("Do not claim generic help requests", skill)
+        self.assertIn("reproduce the guide verbatim", skill.lower())
+        self.assertIn("Do not create or infer persistent activation state", skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertIn("Start here", guide)
+        self.assertIn("Authorization boundaries", guide)
+        self.assertIn("`$copy-agents`", guide)
+        self.assertNotIn("unqualified", skill.lower())
+        self.assertNotIn("unqualified", guide.lower())
+        self.assertNotIn("[TODO:", skill)
+
     def test_marketplace_points_to_plugin(self) -> None:
         marketplace = json.loads(MARKETPLACE_PATH.read_text())
         entries = [entry for entry in marketplace["plugins"] if entry["name"] == "pilot"]
@@ -275,6 +298,9 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/copy-agents/agents/openai.yaml",
                         "skills/git-status/SKILL.md",
                         "skills/git-status/agents/openai.yaml",
+                        "skills/help/SKILL.md",
+                        "skills/help/agents/openai.yaml",
+                        "skills/help/references/help.md",
                         "skills/next-slice/SKILL.md",
                         "skills/next-slice/agents/openai.yaml",
                         "skills/planning/SKILL.md",
