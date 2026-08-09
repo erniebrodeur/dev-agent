@@ -49,6 +49,7 @@ Local commits use a two-phase workflow. `commit` begins with the shared Git stat
 - `plugins/pilot/` contains the installable plugin.
 - `plugins/pilot/AGENTS.md` is the canonical portable development policy.
 - `.agents/plugins/marketplace.json` exposes the plugin through a repository-local marketplace.
+- `submission/test-cases.json` contains the five positive and three negative plugin-submission test cases.
 - `scripts/package-plugin` creates a deterministic plugin archive.
 - `tests/` verifies the repository and packaged-plugin structure.
 - `INTERNAL.md` records the durable project model for maintainers and development agents.

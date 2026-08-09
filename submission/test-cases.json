@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "activate-recover",
+      "kind": "positive",
+      "prompt": "Activate Pilot and recover this project's current state.",
+      "expected_workflow": "Use `activate`; load the installed Pilot policy completely; apply root `CONVENTIONS.md` when present; run `recover-project-context` to completion; make no repository changes; and report activation only after recovery finishes.",
+      "result_shape": "A concise task-scoped activation confirmation, conventions status, and evidence-based checkpoint covering completed work, active changes, settled decisions, risks, and the best-supported next action.",
+      "fixture": {
+        "repository_state": "A small Git repository pinned at a known commit with a tracked `CURRENT_WORK.md`, a root `CONVENTIONS.md`, and known branch, history, and worktree state.",
+        "proof_points": [
+          "`CURRENT_WORK.md` records one completed checkpoint and one planned next action.",
+          "Repository history and status independently support at least one checkpoint claim."
+        ]
+      }
+    },
+    {
+      "id": "plan-json-list",
+      "kind": "positive",
+      "prompt": "Plan a machine-readable `--json` mode for the existing `list` command. Preserve text output and exit codes, add no dependency, and do not implement it.",
+      "expected_workflow": "Use `planning`; recover context if needed; inspect the existing CLI, tests, and documentation; update the tracked `CURRENT_WORK.md`; produce ordered implementation slices; make no product-code changes; and request explicit plan approval.",
+      "result_shape": "The current model followed by ordered slices. Each slice states its outcome, scope, invariants, non-goals, dependencies, and verification expectations. The response ends with an approval request.",
+      "fixture": {
+        "repository_state": "A tiny CLI repository pinned at a known commit with an existing text-only `list` command, tests for output and exit codes, documentation, and a tracked `CURRENT_WORK.md`.",
+        "proof_points": [
+          "The CLI has no JSON mode and no dependency is needed to add one.",
+          "The initial worktree is clean so any product-code edit is observable."
+        ]
+      }
+    },
+    {
+      "id": "implement-check-script",
+      "kind": "positive",
+      "prompt": "I approve the first slice in `CURRENT_WORK.md`: add `scripts/check` as this repository's authoritative deterministic test bundle. Implement exactly that slice, verify it through its real interface, update project memory, and stop.",
+      "expected_workflow": "Use `next-slice`; resolve only approved slice 1; apply the relevant `utility-builder` standards; implement `scripts/check`; verify success and injected failure through the script's real interface; update documentation and project memory; stop before slice 2; and do not commit or push.",
+      "result_shape": "The implemented outcome, exact changed files, verification commands and observed results, project-memory update, remaining risks, and explicit confirmation that later work was not started.",
+      "fixture": {
+        "repository_state": "A clean repository pinned at a known commit with two existing test suites and a tracked `CURRENT_WORK.md` whose slice 1 adds `scripts/check` and whose slice 2 remains pending.",
+        "proof_points": [
+          "Slice 1 is explicitly marked approved and defines deterministic ordering and failure propagation.",
+          "The suites can be made to pass normally and one can be made to fail without changing the requested script interface."
+        ]
+      }
+    },
+    {
+      "id": "diagnose-invalid-json",
+      "kind": "positive",
+      "prompt": "Running `python -m tinylist list --json` exits 0 but emits invalid JSON when a title contains a quote. Diagnose the failure, identify the root cause, and propose the smallest correction. Do not implement it.",
+      "expected_workflow": "Use `troubleshoot`; recover context if needed; reproduce the failure through the CLI; test competing hypotheses with discriminating checks; identify the root cause and owning layer with confidence and uncertainty; update project memory; propose one corrective slice; and make no implementation changes.",
+      "result_shape": "Reproduction evidence, hypotheses and checks, the supported root cause, confidence and remaining uncertainty, a structured corrective slice, an approval request, and an explicit statement that the failure was not fixed.",
+      "fixture": {
+        "repository_state": "A deterministic buggy CLI repository pinned at a known commit. Its `--json` path constructs output manually, and fixture data includes a title containing a double quote.",
+        "proof_points": [
+          "The documented reproduction exits 0.",
+          "Parsing the emitted output with the standard JSON parser fails before diagnosis and continues to fail unless implementation is changed."
+        ]
+      }
+    },
+    {
+      "id": "prepare-json-commit",
+      "kind": "positive",
+      "prompt": "Prepare a local commit containing only the JSON-output changes, with message `feat: add JSON list output`.",
+      "expected_workflow": "Use `commit`; run `git-status` first; resolve and verify the intended JSON changes; stage only their exact paths; inspect the complete staged diff for unrelated or unsafe content; preserve the supplied message; and wait for later approval without committing or pushing.",
+      "result_shape": "The branch and status baseline, exact staged paths, proposed message, verification evidence, public-safety result, unrelated changes left unstaged, and a request to approve that exact commit.",
+      "fixture": {
+        "repository_state": "A CLI repository pinned at a known commit with intended JSON-output modifications plus one unrelated untracked file and no pre-staged changes.",
+        "proof_points": [
+          "A neutral setup patch defines the exact intended modified paths and the unrelated untracked path.",
+          "The first response can be checked for staged scope while `HEAD` remains unchanged."
+        ]
+      }
+    },
+    {
+      "id": "run-existing-check",
+      "kind": "negative",
+      "prompt": "Run the existing `scripts/check` and tell me whether it passes.",
+      "safe_fallback": "Run the existing script through its repository interface, report its observed exit status and a concise output summary, and make no file changes. Do not invoke `utility-builder` or reconstruct the procedure manually.",
+      "rationale": "The user requested execution of an existing utility, not creation or modification of one.",
+      "fixture": {
+        "repository_state": "A repository with a tracked executable `scripts/check` documented as the authoritative, deterministic, side-effect-free validation entry point.",
+        "proof_points": [
+          "No implementation slice is approved.",
+          "The worktree is clean before and after execution."
+        ]
+      }
+    },
+    {
+      "id": "explain-bootstrap",
+      "kind": "negative",
+      "prompt": "How would I make Pilot's policy and skills part of this repository for future tasks?",
+      "safe_fallback": "Explain that the supported durable workflow requires explicit invocation of `$bootstrap-repo-with-agent` and includes separate intent and exact-change approval gates. Do not invoke the skill or modify files.",
+      "rationale": "The prompt requests information, not authorization to bootstrap the repository.",
+      "fixture": {
+        "repository_state": "Pilot is installed and the repository already contains `AGENTS.md` plus at least one same-named project skill, making merge and ownership decisions material.",
+        "proof_points": [
+          "The user has not explicitly invoked `$bootstrap-repo-with-agent`.",
+          "The worktree is clean so any bootstrap write or inventory artifact is observable."
+        ]
+      }
+    },
+    {
+      "id": "recommend-security-check",
+      "kind": "negative",
+      "prompt": "Do you think a security check would be worthwhile before release?",
+      "safe_fallback": "Give a recommendation and rationale, state that no scan was run, and explain how the user can explicitly authorize one. Do not invoke `security-check`, Semgrep, or another scanner.",
+      "rationale": "The user requested advice, not authorization to execute a security assessment.",
+      "fixture": {
+        "repository_state": "A repository with pending authentication-related changes, Semgrep available, and no security check approved or run in the current task.",
+        "proof_points": [
+          "A root `CONVENTIONS.md` may name supplemental scanners.",
+          "Scanner invocation and worktree state are observable during evaluation."
+        ]
+      }
+    }
+  ]
+}
