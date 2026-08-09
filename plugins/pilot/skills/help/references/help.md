@@ -12,7 +12,7 @@ Pilot provides development workflows with clear boundaries between planning, imp
 
 ## Other workflows
 
-- **Install Pilot policy:** Invoke `$copy-agents` to propose a project-owned `AGENTS.md`. Pilot shows the exact result and waits before writing.
+- **Bootstrap a repository:** Invoke `$bootstrap-repo-with-agent` to propose project-owned Pilot policy and skills. Pilot explains the effects, confirms intent, shows the exact result, and waits before writing.
 - **Build a utility:** Ask Pilot to create or change an authoritative repository script for a repeatable procedure. Merely running a build, test, deployment, or existing script is not utility building.
 - **Troubleshoot:** Give Pilot an undiagnosed concrete failure with no approved correction. A fix request starts diagnosis, but an approved correction returns to `next-slice` for implementation.
 - **Check security:** Optionally request a security check to run Semgrep and report findings without applying fixes.

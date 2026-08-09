@@ -1,0 +1,6 @@
+interface:
+  display_name: "Bootstrap Repository with Pilot"
+  short_description: "Install project-owned Pilot policy and skills"
+  default_prompt: "Use $bootstrap-repo-with-agent to explain and propose installing Pilot policy and skills in this repository."
+policy:
+  allow_implicit_invocation: false

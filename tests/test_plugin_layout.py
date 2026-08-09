@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -16,7 +17,9 @@ MARKETPLACE_PATH = ROOT / ".agents" / "plugins" / "marketplace.json"
 POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
 ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 COMMIT_ROOT = PLUGIN_ROOT / "skills" / "commit"
-COPY_AGENTS_ROOT = PLUGIN_ROOT / "skills" / "copy-agents"
+BOOTSTRAP_REPO_WITH_AGENT_ROOT = (
+    PLUGIN_ROOT / "skills" / "bootstrap-repo-with-agent"
+)
 GIT_STATUS_ROOT = PLUGIN_ROOT / "skills" / "git-status"
 HELP_ROOT = PLUGIN_ROOT / "skills" / "help"
 RECOVER_CONTEXT_ROOT = PLUGIN_ROOT / "skills" / "recover-project-context"
@@ -42,29 +45,25 @@ class PluginLayoutTests(unittest.TestCase):
         manifest = json.loads(MANIFEST_PATH.read_text())
 
         self.assertEqual(PLUGIN_ROOT.name, manifest["name"])
-        self.assertRegex(
-            manifest["version"],
-            r"^0\.1\.0\+codex\.[a-z0-9-]+$",
-        )
+        self.assertEqual("1.0.0", manifest["version"])
         self.assertEqual("./skills/", manifest["skills"])
         self.assertNotIn("apps", manifest)
         self.assertNotIn("mcpServers", manifest)
-        self.assertIn(
-            "Two-phase local commit preparation and approval",
-            manifest["interface"]["capabilities"],
+        self.assertEqual("GPL-3.0-only", manifest["license"])
+        self.assertEqual(
+            "https://erniebrodeur.github.io/pilot/",
+            manifest["homepage"],
         )
-        self.assertIn(
-            "Reusable read-only Git status reporting",
-            manifest["interface"]["capabilities"],
+        self.assertEqual(
+            "https://github.com/erniebrodeur/pilot",
+            manifest["repository"],
         )
-        self.assertIn(
-            "Deterministic repository utility creation",
-            manifest["interface"]["capabilities"],
-        )
-        self.assertIn(
-            "Canonical capability guidance",
-            manifest["interface"]["capabilities"],
-        )
+        interface = manifest["interface"]
+        self.assertEqual("Developer Tools", interface["category"])
+        self.assertEqual(["Interactive", "Write"], interface["capabilities"])
+        self.assertEqual(3, len(interface["defaultPrompt"]))
+        for field in ("composerIcon", "logo"):
+            self.assertTrue((PLUGIN_ROOT / interface[field]).is_file())
 
     def test_activate_matches_activation_requests_and_loads_canonical_policy(self) -> None:
         skill = (ACTIVATE_ROOT / "SKILL.md").read_text()
@@ -72,6 +71,8 @@ class PluginLayoutTests(unittest.TestCase):
 
         self.assertTrue(POLICY_PATH.is_file())
         self.assertIn("`../../AGENTS.md`", skill)
+        self.assertIn("`../../../AGENTS.md`", skill)
+        self.assertIn("repository-owned copy", skill)
         self.assertIn("`../recover-project-context/SKILL.md`", skill)
         self.assertIn("Activation is incomplete until", skill)
         self.assertIn("Do not report Pilot as active", skill)
@@ -128,7 +129,9 @@ class PluginLayoutTests(unittest.TestCase):
             "next-slice": skill_description(NEXT_SLICE_ROOT).lower(),
             "troubleshoot": skill_description(TROUBLESHOOT_ROOT).lower(),
             "commit": skill_description(COMMIT_ROOT).lower(),
-            "copy-agents": skill_description(COPY_AGENTS_ROOT).lower(),
+            "bootstrap-repo-with-agent": skill_description(
+                BOOTSTRAP_REPO_WITH_AGENT_ROOT
+            ).lower(),
             "utility-builder": skill_description(UTILITY_BUILDER_ROOT).lower(),
         }
         contracts = [
@@ -167,9 +170,12 @@ class PluginLayoutTests(unittest.TestCase):
                 ("prepare or stage changes", "create a local commit"),
             ),
             (
-                "$copy-agents: install Pilot policy in this project's AGENTS.md.",
-                "copy-agents",
-                ("use only when the user explicitly invokes `$copy-agents`",),
+                "$bootstrap-repo-with-agent: install Pilot policy in this project's AGENTS.md.",
+                "bootstrap-repo-with-agent",
+                (
+                    "use only when the user explicitly invokes "
+                    "`$bootstrap-repo-with-agent`",
+                ),
             ),
             (
                 "Create a reusable deployment script.",
@@ -210,11 +216,13 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("`next-slice` owns that work", descriptions["utility-builder"])
         self.assertIn(
             "do not use for a natural-language request",
-            descriptions["copy-agents"],
+            descriptions["bootstrap-repo-with-agent"],
         )
 
-        copy_metadata = (COPY_AGENTS_ROOT / "agents" / "openai.yaml").read_text()
-        self.assertIn("allow_implicit_invocation: false", copy_metadata)
+        bootstrap_metadata = (
+            BOOTSTRAP_REPO_WITH_AGENT_ROOT / "agents" / "openai.yaml"
+        ).read_text()
+        self.assertIn("allow_implicit_invocation: false", bootstrap_metadata)
 
     def test_portable_policy_defines_an_implementation_slice(self) -> None:
         policy = POLICY_PATH.read_text()
@@ -345,15 +353,24 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
-    def test_copy_agents_requires_an_approved_semantic_merge(self) -> None:
-        skill = (COPY_AGENTS_ROOT / "SKILL.md").read_text()
-        metadata = (COPY_AGENTS_ROOT / "agents" / "openai.yaml").read_text()
+    def test_bootstrap_repo_with_agent_requires_approved_bootstrap(self) -> None:
+        skill = (BOOTSTRAP_REPO_WITH_AGENT_ROOT / "SKILL.md").read_text()
+        metadata = (
+            BOOTSTRAP_REPO_WITH_AGENT_ROOT / "agents" / "openai.yaml"
+        ).read_text()
 
         self.assertIn("`../../AGENTS.md`", skill)
+        self.assertIn("`.agents/skills/`", skill)
+        self.assertIn("every Pilot skill except `bootstrap-repo-with-agent`", skill)
+        self.assertIn("Before modifying anything", skill)
+        self.assertIn("Ask whether this is the intended result", skill)
+        self.assertIn("stop until the user explicitly confirms", skill)
         self.assertIn("semantic merge", skill)
         self.assertIn("complete proposed `AGENTS.md`", skill)
+        self.assertIn("full skill inventory", skill)
         self.assertIn("Wait for explicit approval", skill)
         self.assertIn("will not automatically synchronize", skill)
+        self.assertIn("Do not copy `bootstrap-repo-with-agent`", skill)
         self.assertIn("allow_implicit_invocation: false", metadata)
         self.assertNotIn("[TODO:", skill)
 
@@ -390,7 +407,7 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("Start here", guide)
         self.assertIn("Authorization boundaries", guide)
         self.assertIn("does not call a problem fixed", guide)
-        self.assertIn("`$copy-agents`", guide)
+        self.assertIn("`$bootstrap-repo-with-agent`", guide)
         self.assertNotIn("unqualified", skill.lower())
         self.assertNotIn("unqualified", guide.lower())
         self.assertNotIn("[TODO:", skill)
@@ -410,19 +427,43 @@ class PluginLayoutTests(unittest.TestCase):
     def test_package_contains_exact_plugin_files_and_normalized_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             archive_path = Path(directory) / "pilot.zip"
+            object_directory = Path(directory) / "objects"
+            object_directory.mkdir()
+            environment = os.environ | {
+                "GIT_INDEX_FILE": str(Path(directory) / "package-index"),
+                "GIT_OBJECT_DIRECTORY": str(object_directory),
+                "GIT_ALTERNATE_OBJECT_DIRECTORIES": str(ROOT / ".git" / "objects"),
+            }
 
-            subprocess.run([PACKAGE_SCRIPT, archive_path], check=True)
+            subprocess.run(
+                ["git", "read-tree", "HEAD"],
+                cwd=ROOT,
+                env=environment,
+                check=True,
+            )
+            subprocess.run(
+                ["git", "add", "plugins/pilot"],
+                cwd=ROOT,
+                env=environment,
+                check=True,
+            )
+            subprocess.run(
+                [PACKAGE_SCRIPT, archive_path],
+                env=environment,
+                check=True,
+            )
 
             with zipfile.ZipFile(archive_path) as archive:
                 expected_files = [
                     ".codex-plugin/plugin.json",
                     "AGENTS.md",
+                    "assets/pilot-living-interface-logo.svg",
                     "skills/activate/SKILL.md",
                     "skills/activate/agents/openai.yaml",
+                    "skills/bootstrap-repo-with-agent/SKILL.md",
+                    "skills/bootstrap-repo-with-agent/agents/openai.yaml",
                     "skills/commit/SKILL.md",
                     "skills/commit/agents/openai.yaml",
-                    "skills/copy-agents/SKILL.md",
-                    "skills/copy-agents/agents/openai.yaml",
                     "skills/git-status/SKILL.md",
                     "skills/git-status/agents/openai.yaml",
                     "skills/help/SKILL.md",

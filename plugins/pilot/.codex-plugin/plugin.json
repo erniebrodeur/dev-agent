@@ -1,30 +1,42 @@
 {
   "name": "pilot",
-  "version": "0.1.0+codex.20260808190017",
+  "version": "1.0.0",
   "description": "Reusable development workflows for Codex.",
   "author": {
-    "name": "Pilot contributors"
+    "name": "Pilot contributors",
+    "url": "https://github.com/erniebrodeur/pilot"
   },
+  "homepage": "https://erniebrodeur.github.io/pilot/",
+  "repository": "https://github.com/erniebrodeur/pilot",
+  "license": "GPL-3.0-only",
+  "keywords": [
+    "codex",
+    "developer-tools",
+    "software-development",
+    "workflow"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Pilot",
     "shortDescription": "Disciplined development workflows for Codex.",
-    "longDescription": "Pilot packages reusable workflows for discussing, implementing, verifying, and releasing software changes.",
+    "longDescription": "Pilot provides reusable workflows for planning, implementing, verifying, troubleshooting, and managing software changes with Codex.",
     "developerName": "Pilot contributors",
-    "category": "Productivity",
+    "category": "Developer Tools",
     "capabilities": [
-      "Development policy activation",
-      "Project policy installation",
-      "Project context recovery",
-      "Conversational implementation planning",
-      "Approved slice implementation",
-      "Reusable read-only Git status reporting",
-      "Two-phase local commit preparation and approval",
-      "Evidence-driven failure diagnosis",
-      "User-authorized Semgrep security analysis",
-      "Deterministic repository utility creation",
-      "Canonical capability guidance"
+      "Interactive",
+      "Write"
     ],
-    "defaultPrompt": "Help me develop software with Pilot."
+    "websiteURL": "https://erniebrodeur.github.io/pilot/",
+    "privacyPolicyURL": "https://erniebrodeur.github.io/pilot/privacy/",
+    "termsOfServiceURL": "https://erniebrodeur.github.io/pilot/terms/",
+    "defaultPrompt": [
+      "Activate Pilot and recover this project's current state.",
+      "Help me plan the next implementation change.",
+      "Diagnose this software failure before proposing a fix."
+    ],
+    "brandColor": "#2563EB",
+    "composerIcon": "./assets/pilot-living-interface-logo.svg",
+    "logo": "./assets/pilot-living-interface-logo.svg",
+    "screenshots": []
   }
 }

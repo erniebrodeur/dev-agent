@@ -13,10 +13,10 @@ Activation is incomplete until the canonical policy is loaded, applicable conven
 
 ## Workflow
 
-1. Read `../../AGENTS.md` completely. Resolve the path relative to this skill directory. If it is missing or unreadable, stop and report that activation failed.
+1. Resolve the Pilot policy from this skill's location. For an installed plugin skill, read `../../AGENTS.md`. For a repository-owned copy under `.agents/skills/activate`, read the repository root `AGENTS.md` at `../../../AGENTS.md`. Read the resolved file completely. If it is missing or unreadable, stop and report that activation failed.
 2. Treat the loaded file as the current Pilot baseline. Continue to honor higher-priority platform, developer, user, and unrelated project-specific instructions.
 3. If the active repository has a root `CONVENTIONS.md`, read it completely after the baseline and apply supported conventions as described by the baseline.
-4. If repository instructions are clearly attributable to a copied Pilot baseline, use the installed baseline for Pilot behavior during this task. Preserve unrelated project instructions. Do not classify instructions as copied merely because their wording or principles overlap.
+4. When running from the installed plugin, use the installed baseline for Pilot behavior during this task while preserving unrelated project instructions. When running from a repository-owned copy, use the repository policy as its intentionally drifted baseline. Do not classify instructions as copied merely because their wording or principles overlap.
 5. Read `../recover-project-context/SKILL.md` completely and run its recovery workflow for the active repository. This step is mandatory and blocking even when repository context appears obvious or was supplied elsewhere. If no active repository exists, report that recovery was skipped.
 6. State concisely that Pilot is active for the current task, whether `CONVENTIONS.md` was loaded, and the recovered project state.
 7. Continue with the user's task under the effective instructions.

@@ -2,7 +2,9 @@
 
 Pilot is a Codex plugin for disciplined, evidence-driven software development workflows.
 
-The project is being built as a sequence of independently reviewed slices. The current plugin can activate its portable development policy for one task, show a canonical capability guide, install a project-owned copy, recover project context, develop uncertain direction into approved implementation slices, implement one approved slice at a time, turn repeatable procedures into deterministic repository scripts, report reusable read-only Git status, prepare and approve local commits in two phases, diagnose concrete failures before proposing corrections, and run user-authorized Semgrep security checks.
+Pilot can activate its portable development policy for one task, show a canonical capability guide, install a project-owned copy, recover project context, plan and implement focused changes, build deterministic repository utilities, report Git status, prepare local commits, diagnose failures, and run user-authorized Semgrep security checks.
+
+[Documentation](https://erniebrodeur.github.io/pilot/) · [Privacy](https://erniebrodeur.github.io/pilot/privacy/) · [Terms](https://erniebrodeur.github.io/pilot/terms/)
 
 ## Use
 
@@ -18,13 +20,13 @@ Activation loads the policy shipped with the installed plugin for the current ta
 
 Ask for help while Pilot is active to show its canonical, version-current capability guide. Pilot also responds when the user explicitly asks for Pilot help, but it does not claim generic help requests while inactive.
 
-To propose installing the policy as the active project's durable `AGENTS.md`, invoke:
+To propose bootstrapping the active repository with project-owned policy and skills, invoke:
 
 ```text
-$copy-agents
+$bootstrap-repo-with-agent
 ```
 
-The skill inspects existing instructions, proposes a semantic merge, and waits for approval of the exact result before writing. The copied policy becomes project-owned and does not automatically synchronize with plugin updates.
+Before writing, the skill explains that it will merge Pilot policy into the root `AGENTS.md` and copy Pilot's other skills into `.agents/skills/`. It asks whether that result is intended, inspects existing files, proposes the exact changes, and waits for final approval. The copied policy and skills become project-owned and do not automatically synchronize with plugin updates.
 
 Project context recovery also activates implicitly for read-only requests such as “where are we?”, “what is already planned next?”, or “catch me up before I resume.” It recovers established project state and planned next work without choosing new direction or implementing anything. It verifies an existing root `CURRENT_WORK.md` against repository evidence. `CURRENT_WORK.md` is a Pilot convention for a mutable project scratch pad rather than a standard development artifact or design authority. Without that file, recovery performs a deeper scan, explains the convention, and offers to create either tracked or ignored project memory after reporting its findings.
 
@@ -68,3 +70,7 @@ scripts/package-plugin
 The archive contains only Git-tracked regular files under `plugins/pilot`; tracked
 symlinks are rejected. Archive paths, timestamps, and permissions are normalized
 for deterministic output. The generated `dist/` directory is ignored by Git.
+
+## License
+
+Pilot is licensed under the [GNU General Public License v3.0 only](LICENSE).
