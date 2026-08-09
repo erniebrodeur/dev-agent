@@ -1,6 +1,6 @@
 interface:
   display_name: "Commit"
-  short_description: "Prepare and approve a safe local commit"
-  default_prompt: "Use $commit to prepare a local commit, show its staged scope and message, and wait for approval before committing."
+  short_description: "Prepare and create an approved local commit"
+  default_prompt: "Use $commit after a request to prepare, stage, or create a local commit, show its exact staged scope and message, and wait for approval before committing."
 policy:
   allow_implicit_invocation: true

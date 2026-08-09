@@ -1,6 +1,6 @@
 interface:
   display_name: "Utility Builder"
   short_description: "Turn repeated procedures into reliable scripts"
-  default_prompt: "Use $utility-builder to replace this repeatable deterministic procedure with an authoritative repository script, or recommend one when repeated manual execution is wasting context."
+  default_prompt: "Use $utility-builder to create or change an authoritative repository script for this repeatable deterministic procedure, or recommend one when repeated manual execution is wasting context. Do not use it merely to execute the procedure."
 policy:
   allow_implicit_invocation: true

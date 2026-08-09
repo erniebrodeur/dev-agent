@@ -1,6 +1,6 @@
 interface:
   display_name: "Recover Project Context"
-  short_description: "Reconstruct project state and next work"
-  default_prompt: "Use $recover-project-context to determine where this project stands and what comes next."
+  short_description: "Recover established state and planned next work"
+  default_prompt: "Use $recover-project-context to reconstruct this project's established state and already-planned next work."
 policy:
   allow_implicit_invocation: true

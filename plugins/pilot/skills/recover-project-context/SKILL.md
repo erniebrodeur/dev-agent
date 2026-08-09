@@ -1,6 +1,6 @@
 ---
 name: recover-project-context
-description: Recover the active project's current state and next work from repository evidence. Use when the user asks where we are, where we were, what is next, to resume or continue prior work, to catch up on a project, or expresses equivalent context-recovery intent. Also run this workflow when Pilot's `$activate` skill directs it.
+description: Recover the active project's already-established current state and planned next work from repository evidence. Use when the user asks for a read-only checkpoint, including where we are, where we were, what remains in an existing plan, what work is already planned next, or what they need to know before resuming prior work. Do not use to implement an approved slice or choose or design new future work. Recovery starts read-only unless checkpoint creation is separately approved. Also run this workflow when Pilot's `$activate` skill directs it.
 ---
 
 # Recover Project Context
@@ -39,6 +39,7 @@ When no root `CURRENT_WORK.md` exists:
 ## Boundaries
 
 - Keep recovery read-only unless the user separately approves creating or updating project memory.
+- Do not choose or design new future work; use planning when direction is unsettled.
 - Do not implement the inferred next action.
 - Do not treat a checkpoint as design authority when repository evidence disagrees.
 - Do not scan parent directories or unrelated repositories.

@@ -1,6 +1,6 @@
 ---
 name: copy-agents
-description: Install Pilot's portable development policy into the active project's root AGENTS.md after reviewing any existing instructions, proposing a semantic merge, and receiving approval for the exact result. Use only when the user explicitly invokes `$copy-agents` or explicitly asks to copy, install, or merge the Pilot policy into a project.
+description: Install Pilot's portable development policy into the active project's root AGENTS.md after reviewing any existing instructions, proposing a semantic merge, and receiving approval for the exact result. Use only when the user explicitly invokes `$copy-agents`. Do not use for a natural-language request to edit AGENTS.md or copy, install, or merge policy without that skill invocation.
 ---
 
 # Copy Agents

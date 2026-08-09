@@ -1,6 +1,6 @@
 ---
 name: troubleshoot
-description: Diagnose a concrete software failure through reproduction, competing hypotheses, and direct evidence, then propose a corrective slice and wait for approval. Use implicitly when implementation goes off course, verification fails or contradicts the expected outcome, observed behavior is wrong, or the user asks to debug, troubleshoot, or fix a concrete failure. Do not use for routine implementation verification, unsettled product intent, or implementation of an already-approved correction.
+description: Diagnose an undiagnosed concrete failure through reproduction, competing hypotheses, and direct evidence, then propose a corrective slice and wait for approval. Use implicitly when observed behavior is wrong or the user asks to debug, troubleshoot, or fix a concrete failure for which no correction is already approved. During an active approved slice, `next-slice` owns ordinary in-scope diagnosis and correction. Do not use for routine implementation verification, unsettled product intent, or implementation of an approved correction.
 ---
 
 # Troubleshoot
@@ -22,6 +22,7 @@ Diagnose the failure rigorously, propose the narrowest supported correction, and
 
 ## Boundaries
 
+- Do not take ownership of ordinary in-scope failures encountered while `next-slice` is implementing an active approved slice.
 - Do not edit implementation files, tests, configuration, or product documentation during troubleshooting.
 - Do not inherit correction authority from an earlier fix request or active implementation slice.
 - Do not report the failure as fixed or resolved. This workflow changes no implementation and verifies no corrected result.

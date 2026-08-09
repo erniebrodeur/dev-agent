@@ -27,6 +27,15 @@ SECURITY_CHECK_ROOT = PLUGIN_ROOT / "skills" / "security-check"
 UTILITY_BUILDER_ROOT = PLUGIN_ROOT / "skills" / "utility-builder"
 
 
+def skill_description(skill_root: Path) -> str:
+    frontmatter = (skill_root / "SKILL.md").read_text().split("---\n", 2)[1]
+    return next(
+        line.removeprefix("description: ")
+        for line in frontmatter.splitlines()
+        if line.startswith("description: ")
+    )
+
+
 class PluginLayoutTests(unittest.TestCase):
     def test_manifest_identity_matches_plugin_directory(self) -> None:
         manifest = json.loads(MANIFEST_PATH.read_text())
@@ -100,7 +109,7 @@ class PluginLayoutTests(unittest.TestCase):
         skill = (PLANNING_ROOT / "SKILL.md").read_text()
         metadata = (PLANNING_ROOT / "agents" / "openai.yaml").read_text()
 
-        self.assertIn("no approved implementation slice", skill)
+        self.assertIn("choosing or defining future software work", skill)
         self.assertIn("`../recover-project-context/SKILL.md`", skill)
         self.assertIn("CURRENT_WORK.md", skill)
         self.assertIn("provisional", skill)
@@ -110,6 +119,101 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("Do not implement", skill)
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
+
+    def test_skill_descriptions_define_distinct_routing_owners(self) -> None:
+        descriptions = {
+            "planning": skill_description(PLANNING_ROOT).lower(),
+            "recover": skill_description(RECOVER_CONTEXT_ROOT).lower(),
+            "next-slice": skill_description(NEXT_SLICE_ROOT).lower(),
+            "troubleshoot": skill_description(TROUBLESHOOT_ROOT).lower(),
+            "commit": skill_description(COMMIT_ROOT).lower(),
+            "copy-agents": skill_description(COPY_AGENTS_ROOT).lower(),
+            "utility-builder": skill_description(UTILITY_BUILDER_ROOT).lower(),
+        }
+        contracts = [
+            (
+                "Where are we, what's left, and what is already planned next?",
+                "recover",
+                (
+                    "already-established current state",
+                    "what remains in an existing plan",
+                    "planned next work",
+                ),
+            ),
+            (
+                "What future work should we define next?",
+                "planning",
+                ("choosing or defining future software work", "unsettled idea"),
+            ),
+            (
+                "Implement the approved corrective slice.",
+                "next-slice",
+                ("approved corrective slice",),
+            ),
+            (
+                "Implement the approved slice that creates our deploy script.",
+                "next-slice",
+                ("approved slice that creates or changes a repository utility",),
+            ),
+            (
+                "This behavior fails and has no approved correction.",
+                "troubleshoot",
+                ("undiagnosed concrete failure", "no correction is already approved"),
+            ),
+            (
+                "Prepare or stage these changes for a commit.",
+                "commit",
+                ("prepare or stage changes", "create a local commit"),
+            ),
+            (
+                "$copy-agents: install Pilot policy in this project's AGENTS.md.",
+                "copy-agents",
+                ("use only when the user explicitly invokes `$copy-agents`",),
+            ),
+            (
+                "Create a reusable deployment script.",
+                "utility-builder",
+                ("create or change a repository-owned script", "repeatable, deterministic"),
+            ),
+        ]
+
+        for prompt, owner, required_fragments in contracts:
+            with self.subTest(prompt=prompt, owner=owner):
+                for fragment in required_fragments:
+                    self.assertIn(fragment, descriptions[owner])
+
+        self.assertIn("already-established project state", descriptions["planning"])
+        self.assertNotIn("or next work", descriptions["planning"])
+        self.assertNotIn("no approved implementation slice", descriptions["planning"])
+        self.assertIn("choose or design new future work", descriptions["recover"])
+        self.assertIn("do not use to implement", descriptions["recover"])
+        self.assertIn("do not use to diagnose a new failure", descriptions["next-slice"])
+        self.assertIn(
+            "during an active approved slice, `next-slice` owns",
+            descriptions["troubleshoot"],
+        )
+        self.assertIn("possible commit message is read-only", descriptions["commit"])
+        self.assertNotIn("proposes a commit message", descriptions["commit"])
+        self.assertIn(
+            "do not use merely to run an existing script",
+            descriptions["utility-builder"],
+        )
+        self.assertIn(
+            "or to build, test, deploy, release",
+            descriptions["utility-builder"],
+        )
+        self.assertIn(
+            "do not use to implement an approved implementation slice",
+            descriptions["utility-builder"],
+        )
+        self.assertIn("`next-slice` owns that work", descriptions["utility-builder"])
+        self.assertIn(
+            "do not use for a natural-language request",
+            descriptions["copy-agents"],
+        )
+
+        copy_metadata = (COPY_AGENTS_ROOT / "agents" / "openai.yaml").read_text()
+        self.assertIn("allow_implicit_invocation: false", copy_metadata)
 
     def test_portable_policy_defines_an_implementation_slice(self) -> None:
         policy = POLICY_PATH.read_text()

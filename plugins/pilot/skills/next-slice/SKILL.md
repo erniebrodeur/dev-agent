@@ -1,6 +1,6 @@
 ---
 name: next-slice
-description: Implement exactly one approved implementation slice and verify its outcome without beginning later work. Use implicitly when the user clearly authorizes implementation of an already-approved slice or explicitly asks to implement the next approved slice. Do not use for unsettled direction, unapproved work, discussion, planning, diagnosis, an unapproved correction, or troubleshooting completed work.
+description: Implement exactly one approved implementation slice and verify its outcome without beginning later work. Use implicitly when the user clearly authorizes implementation of an already-approved slice, including an approved corrective slice or an approved slice that creates or changes a repository utility, or explicitly asks to implement the next approved slice. Do not use to diagnose a new failure, infer an unapproved correction, choose unsettled direction, or act on unapproved work.
 ---
 
 # Next Slice
@@ -11,7 +11,7 @@ Implement exactly one approved implementation slice, verify it proportionally, r
 
 1. Read applicable project instructions and inspect repository evidence relevant to the approved work.
 2. If project context has not been recovered in the current task, read `../recover-project-context/SKILL.md` completely and run its recovery workflow.
-3. Resolve exactly one approved implementation slice from the current conversation and project memory. Identify its outcome, scope, constraints or invariants, non-goals, dependencies, and verification expectations before editing. Success depends on the problem: use user acceptance for a subjective outcome or current, relevant evidence for a testable failure.
+3. Resolve exactly one approved implementation slice from the current conversation and project memory. Identify its outcome, scope, constraints or invariants, non-goals, dependencies, and verification expectations before editing. Success depends on the problem: use user acceptance for a subjective outcome or current, relevant evidence for a testable failure. This workflow remains the owner when the approved slice creates or changes an authoritative repository utility; read `../utility-builder/SKILL.md` completely and apply its relevant implementation standards without starting a separate workflow.
 4. If no slice is approved, the selected slice is ambiguous, or a material product, public-interface, ownership, workaround, or scope decision remains unresolved, stop. Return to planning or ask for the required user decision rather than choosing silently.
 5. Derive a concise task title from the approved slice's outcome and rename the current task through the host's task-title capability before editing. Prefer the concrete outcome over a generic workflow label. If the capability is unavailable or the rename fails, report the limitation and continue; task naming does not block implementation.
 6. Inspect the relevant implementation, tests, documentation, and working tree. Preserve unrelated user changes and identify the smallest coherent change that can complete the slice.

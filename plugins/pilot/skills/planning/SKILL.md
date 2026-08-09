@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Develop unsettled software direction into an approved sequence of implementation slices through an evidence-based conversational loop. Use implicitly when the user is exploring requirements, design, architecture, scope, or next work; revises an earlier direction; or has no approved implementation slice. Do not use when the user has already approved a slice and asks to implement it, or when completed work needs troubleshooting.
+description: Develop unsettled software direction into an approved sequence of implementation slices through an evidence-based conversational loop. Use implicitly when the user is choosing or defining future software work, exploring requirements, design, architecture, or scope, revising earlier direction, or asking to turn an unsettled idea into implementation slices. Do not use to report already-established project state or planned next work, implement an approved slice, or troubleshoot a concrete failure.
 ---
 
 # Planning
@@ -36,6 +36,7 @@ Treat a root `CURRENT_WORK.md` as the durable context for planning.
 
 ## Boundaries
 
+- Do not use planning merely to report current project state or an already-planned next action; use project-context recovery instead.
 - Do not implement a planned slice, edit implementation files, or treat planning approval as authorization for execution.
 - Do not turn the loop into a fixed questionnaire or ask for facts that inspection can establish.
 - Do not finalize a plan while major product or design choices remain silently unresolved.

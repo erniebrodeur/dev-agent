@@ -1,6 +1,6 @@
 ---
 name: utility-builder
-description: Build authoritative repository scripts for repeatable, deterministic development or operational procedures, or recommend one when repeated agent-performed command sequences waste context or risk execution drift. Use when the user asks for a build, test-bundle, deploy, release-validation, synchronization, reset, seed, or similar repository script, and when repository or conversation evidence shows the same non-trivial deterministic procedure being reconstructed repeatedly. Do not use for fuzzy interpretation, personal automation, disposable probes, or trivial one-off commands.
+description: Build or recommend authoritative repository scripts for repeatable, deterministic development or operational procedures. Use when the user explicitly asks to create or change a repository-owned script for a repeatable, deterministic build, test bundle, deployment, release validation, synchronization, reset, seed, or similar procedure and no approved implementation slice already owns that work, or recommend one when repeated agent-performed command sequences waste context or risk execution drift. Do not use merely to run an existing script or to build, test, deploy, release, synchronize, reset, or seed an application. Do not use to implement an approved implementation slice that creates or changes a repository utility; `next-slice` owns that work.
 ---
 
 # Utility Builder
@@ -20,7 +20,7 @@ Do not repeatedly offer a script the user has declined unless materially new evi
 
 ## Implementation mode
 
-Enter implementation mode only after the user explicitly requests the script or approves a defined implementation slice.
+Enter implementation mode only after the user explicitly requests the script as the current implementation change. When an already-approved implementation slice creates or changes a repository utility, `next-slice` remains the owning workflow and applies the relevant standards below.
 
 1. Define the script's outcome, inputs, outputs, side effects, prerequisites, safety boundary, failure behavior, and observable postconditions.
 2. Inspect the repository's language, toolchain, existing script conventions, directories, dependencies, and owning application logic.
@@ -40,6 +40,7 @@ Enter implementation mode only after the user explicitly requests the script or 
 
 ## Boundaries
 
+- Do not interpret a request to execute a build, test, deployment, release, synchronization, reset, seed, or existing script as a request to create a repository utility.
 - Do not retain fuzzy decision-making, personal automation, disposable investigation code, or trivial one-off commands as repository utilities.
 - Do not add speculative modes, compatibility layers, extension points, or dependencies unrelated to the current procedure.
 - Do not implement a workaround without explaining its constraint and tradeoffs and receiving explicit approval.

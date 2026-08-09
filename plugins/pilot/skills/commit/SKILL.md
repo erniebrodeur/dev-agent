@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Prepare and create a local Git commit through two explicit authorization phases. Use when the user asks to commit, create a commit, stage changes for commit, proposes a commit message, or approves the exact staged scope and message previously prepared by this skill. An initial commit request stages the intended changes and proposes the exact commit but never creates it without later approval.
+description: Prepare and create a local Git commit through two explicit authorization phases. Use when the user asks to prepare or stage changes for a commit, asks to create a local commit, or approves the exact staged scope and message previously prepared by this skill. A request only to suggest, review, or discuss a possible commit message is read-only and does not invoke this workflow. An initial commit request stages the intended changes and proposes the exact commit but never creates it without later approval.
 ---
 
 # Commit
@@ -10,6 +10,8 @@ Prepare a safe, reviewable local commit, obtain approval for its exact staged sc
 ## Required authorization boundary
 
 A request to commit, including a direct instruction such as `commit`, authorizes preparation only. Never treat it as approval to create the commit. Wait for explicit approval of the exact staged scope and proposed message in a later user message.
+
+A standalone request to suggest, review, or discuss a possible commit message does not authorize preparation or staging. Treat it as read-only unless the user also requests commit preparation or approves an existing exact proposal.
 
 ## Preparation phase
 
