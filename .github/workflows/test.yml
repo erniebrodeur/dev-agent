@@ -1,7 +1,9 @@
-name: Build
+name: Tests
 
 on:
   push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -9,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -18,11 +20,3 @@ jobs:
           python-version: "3.13"
       - name: Run tests
         run: python -m unittest discover -s tests
-      - name: Build plugin archive
-        run: scripts/package-plugin
-      - name: Upload plugin archive
-        uses: actions/upload-artifact@v7
-        with:
-          name: pilot-plugin
-          path: dist/pilot.zip
-          if-no-files-found: error

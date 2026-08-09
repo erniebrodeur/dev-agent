@@ -71,6 +71,18 @@ The archive contains only Git-tracked regular files under `plugins/pilot`; track
 symlinks are rejected. Archive paths, timestamps, and permissions are normalized
 for deterministic output. The generated `dist/` directory is ignored by Git.
 
+## Release
+
+Push a `vMAJOR.MINOR.PATCH` tag that matches the version in the plugin manifest:
+
+```sh
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The release workflow runs the tests, builds the plugin archive once, and publishes
+it as a versioned GitHub Release asset such as `pilot-v1.0.0.zip`.
+
 ## License
 
 Pilot is licensed under the [GNU General Public License v3.0 only](LICENSE).
