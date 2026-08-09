@@ -4,6 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import os
+import stat
+import subprocess
 import tempfile
 import zipfile
 from pathlib import Path
@@ -29,16 +32,48 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def plugin_files(plugin_root: Path) -> list[Path]:
-    return sorted(path for path in plugin_root.rglob("*") if path.is_file())
+def plugin_files(repository: Path, plugin_root: Path) -> list[Path]:
+    plugin_path = plugin_root.relative_to(repository).as_posix()
+    try:
+        result = subprocess.run(
+            ["git", "-C", repository, "ls-files", "-z", "--", plugin_path],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except FileNotFoundError as error:
+        raise SystemExit("git is required to identify plugin source files") from error
+    except subprocess.CalledProcessError as error:
+        detail = error.stderr.decode(errors="replace").strip()
+        raise SystemExit(
+            f"unable to identify tracked plugin source files: {detail or error}"
+        ) from error
+
+    files = []
+    for raw_path in result.stdout.split(b"\0"):
+        if not raw_path:
+            continue
+        source = repository / os.fsdecode(raw_path)
+        relative = source.relative_to(plugin_root)
+        try:
+            mode = source.lstat().st_mode
+        except FileNotFoundError as error:
+            raise SystemExit(f"tracked plugin source is missing: {relative}") from error
+        if stat.S_ISLNK(mode):
+            raise SystemExit(f"tracked plugin source cannot be a symlink: {relative}")
+        if not stat.S_ISREG(mode):
+            raise SystemExit(f"tracked plugin source is not a regular file: {relative}")
+        files.append(source)
+
+    return sorted(files, key=lambda path: path.relative_to(plugin_root).as_posix())
 
 
-def package(plugin_root: Path, output: Path) -> None:
+def package(repository: Path, plugin_root: Path, output: Path) -> None:
+    files = plugin_files(repository, plugin_root)
     manifest = plugin_root / ".codex-plugin" / "plugin.json"
-    if not manifest.is_file():
-        raise SystemExit(f"missing plugin manifest: {manifest}")
+    if manifest not in files:
+        raise SystemExit(f"missing tracked plugin manifest: {manifest}")
 
-    files = plugin_files(plugin_root)
     output.parent.mkdir(parents=True, exist_ok=True)
 
     with tempfile.NamedTemporaryFile(dir=output.parent, delete=False) as temporary:
@@ -49,6 +84,7 @@ def package(plugin_root: Path, output: Path) -> None:
             for source in files:
                 relative = source.relative_to(plugin_root)
                 info = zipfile.ZipInfo(relative.as_posix(), ARCHIVE_TIMESTAMP)
+                info.create_system = 3
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.external_attr = 0o100644 << 16
                 archive.writestr(info, source.read_bytes())
@@ -61,7 +97,8 @@ def package(plugin_root: Path, output: Path) -> None:
 
 def main() -> None:
     args = parse_args()
-    package(repository_root() / "plugins" / "pilot", args.output.resolve())
+    root = repository_root()
+    package(root, root / "plugins" / "pilot", args.output.resolve())
 
 
 if __name__ == "__main__":

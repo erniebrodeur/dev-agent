@@ -65,4 +65,6 @@ Create `dist/pilot.zip` with:
 scripts/package-plugin
 ```
 
-The generated `dist/` directory is ignored by Git.
+The archive contains only Git-tracked regular files under `plugins/pilot`; tracked
+symlinks are rejected. Archive paths, timestamps, and permissions are normalized
+for deterministic output. The generated `dist/` directory is ignored by Git.

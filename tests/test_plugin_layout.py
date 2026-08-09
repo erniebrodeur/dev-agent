@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import hashlib
 import json
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -25,6 +25,7 @@ NEXT_SLICE_ROOT = PLUGIN_ROOT / "skills" / "next-slice"
 TROUBLESHOOT_ROOT = PLUGIN_ROOT / "skills" / "troubleshoot"
 SECURITY_CHECK_ROOT = PLUGIN_ROOT / "skills" / "security-check"
 UTILITY_BUILDER_ROOT = PLUGIN_ROOT / "skills" / "utility-builder"
+PACKAGE_SCRIPT = ROOT / "scripts" / "package-plugin"
 
 
 def skill_description(skill_root: Path) -> str:
@@ -406,49 +407,97 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertEqual("AVAILABLE", entries[0]["policy"]["installation"])
         self.assertEqual("ON_INSTALL", entries[0]["policy"]["authentication"])
 
-    def test_package_is_deterministic_and_contains_only_plugin_files(self) -> None:
+    def test_package_contains_exact_plugin_files_and_normalized_metadata(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            first = Path(directory) / "first.zip"
-            second = Path(directory) / "second.zip"
+            archive_path = Path(directory) / "pilot.zip"
 
-            subprocess.run([ROOT / "scripts" / "package-plugin", first], check=True)
-            subprocess.run([ROOT / "scripts" / "package-plugin", second], check=True)
+            subprocess.run([PACKAGE_SCRIPT, archive_path], check=True)
 
-            self.assertEqual(
-                hashlib.sha256(first.read_bytes()).digest(),
-                hashlib.sha256(second.read_bytes()).digest(),
+            with zipfile.ZipFile(archive_path) as archive:
+                expected_files = [
+                    ".codex-plugin/plugin.json",
+                    "AGENTS.md",
+                    "skills/activate/SKILL.md",
+                    "skills/activate/agents/openai.yaml",
+                    "skills/commit/SKILL.md",
+                    "skills/commit/agents/openai.yaml",
+                    "skills/copy-agents/SKILL.md",
+                    "skills/copy-agents/agents/openai.yaml",
+                    "skills/git-status/SKILL.md",
+                    "skills/git-status/agents/openai.yaml",
+                    "skills/help/SKILL.md",
+                    "skills/help/agents/openai.yaml",
+                    "skills/help/references/help.md",
+                    "skills/next-slice/SKILL.md",
+                    "skills/next-slice/agents/openai.yaml",
+                    "skills/planning/SKILL.md",
+                    "skills/planning/agents/openai.yaml",
+                    "skills/recover-project-context/SKILL.md",
+                    "skills/recover-project-context/agents/openai.yaml",
+                    "skills/security-check/SKILL.md",
+                    "skills/security-check/agents/openai.yaml",
+                    "skills/troubleshoot/SKILL.md",
+                    "skills/troubleshoot/agents/openai.yaml",
+                    "skills/utility-builder/SKILL.md",
+                    "skills/utility-builder/agents/openai.yaml",
+                ]
+                self.assertEqual(expected_files, archive.namelist())
+
+                for name in expected_files:
+                    with self.subTest(name=name):
+                        info = archive.getinfo(name)
+                        self.assertEqual((1980, 1, 1, 0, 0, 0), info.date_time)
+                        self.assertEqual(3, info.create_system)
+                        self.assertEqual(0o100644, info.external_attr >> 16)
+                        self.assertEqual(
+                            (PLUGIN_ROOT / name).read_bytes(),
+                            archive.read(name),
+                        )
+
+    def test_package_excludes_ignored_files_and_rejects_symlinks(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory)
+            script = repository / "scripts" / "package-plugin"
+            plugin = repository / "plugins" / "pilot"
+            manifest = plugin / ".codex-plugin" / "plugin.json"
+            policy = plugin / "AGENTS.md"
+            ignored = plugin / "private.secret"
+
+            script.parent.mkdir(parents=True)
+            manifest.parent.mkdir(parents=True)
+            shutil.copy2(PACKAGE_SCRIPT, script)
+            manifest.write_text("{}\n")
+            policy.write_text("# Policy\n")
+            ignored.write_text("not package content\n")
+            (repository / ".gitignore").write_text("*.secret\n")
+
+            subprocess.run(["git", "-C", repository, "init", "-q"], check=True)
+            subprocess.run(
+                ["git", "-C", repository, "add", ".gitignore", "scripts", "plugins"],
+                check=True,
             )
-            with zipfile.ZipFile(first) as archive:
+
+            archive_path = repository / "dist" / "pilot.zip"
+            subprocess.run([script, archive_path], check=True)
+
+            with zipfile.ZipFile(archive_path) as archive:
                 self.assertEqual(
-                    [
-                        ".codex-plugin/plugin.json",
-                        "AGENTS.md",
-                        "skills/activate/SKILL.md",
-                        "skills/activate/agents/openai.yaml",
-                        "skills/commit/SKILL.md",
-                        "skills/commit/agents/openai.yaml",
-                        "skills/copy-agents/SKILL.md",
-                        "skills/copy-agents/agents/openai.yaml",
-                        "skills/git-status/SKILL.md",
-                        "skills/git-status/agents/openai.yaml",
-                        "skills/help/SKILL.md",
-                        "skills/help/agents/openai.yaml",
-                        "skills/help/references/help.md",
-                        "skills/next-slice/SKILL.md",
-                        "skills/next-slice/agents/openai.yaml",
-                        "skills/planning/SKILL.md",
-                        "skills/planning/agents/openai.yaml",
-                        "skills/recover-project-context/SKILL.md",
-                        "skills/recover-project-context/agents/openai.yaml",
-                        "skills/security-check/SKILL.md",
-                        "skills/security-check/agents/openai.yaml",
-                        "skills/troubleshoot/SKILL.md",
-                        "skills/troubleshoot/agents/openai.yaml",
-                        "skills/utility-builder/SKILL.md",
-                        "skills/utility-builder/agents/openai.yaml",
-                    ],
+                    [".codex-plugin/plugin.json", "AGENTS.md"],
                     archive.namelist(),
                 )
+
+            symlink = plugin / "policy-link"
+            symlink.symlink_to("AGENTS.md")
+            subprocess.run(["git", "-C", repository, "add", symlink], check=True)
+
+            result = subprocess.run(
+                [script, repository / "dist" / "with-symlink.zip"],
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn("symlink", result.stderr.lower())
 
 
 if __name__ == "__main__":
