@@ -1,6 +1,6 @@
 ---
 name: next-slice
-description: Implement exactly one approved implementation slice and verify its outcome without beginning later work. Use implicitly when the user clearly authorizes implementation of an already-approved slice or explicitly asks to implement the next approved slice. Do not use for unsettled direction, unapproved work, discussion, planning, diagnosis without a fix request, or troubleshooting completed work.
+description: Implement exactly one approved implementation slice and verify its outcome without beginning later work. Use implicitly when the user clearly authorizes implementation of an already-approved slice or explicitly asks to implement the next approved slice. Do not use for unsettled direction, unapproved work, discussion, planning, diagnosis, an unapproved correction, or troubleshooting completed work.
 ---
 
 # Next Slice
@@ -11,14 +11,14 @@ Implement exactly one approved implementation slice, verify it proportionally, r
 
 1. Read applicable project instructions and inspect repository evidence relevant to the approved work.
 2. If project context has not been recovered in the current task, read `../recover-project-context/SKILL.md` completely and run its recovery workflow.
-3. Resolve exactly one approved implementation slice from the current conversation and project memory. Identify its outcome, scope, constraints or invariants, non-goals, dependencies, and verification expectations before editing.
+3. Resolve exactly one approved implementation slice from the current conversation and project memory. Identify its outcome, scope, constraints or invariants, non-goals, dependencies, and verification expectations before editing. Success depends on the problem: use user acceptance for a subjective outcome or current, relevant evidence for a testable failure.
 4. If no slice is approved, the selected slice is ambiguous, or a material product, public-interface, ownership, workaround, or scope decision remains unresolved, stop. Return to planning or ask for the required user decision rather than choosing silently.
 5. Derive a concise task title from the approved slice's outcome and rename the current task through the host's task-title capability before editing. Prefer the concrete outcome over a generic workflow label. If the capability is unavailable or the rename fails, report the limitation and continue; task naming does not block implementation.
 6. Inspect the relevant implementation, tests, documentation, and working tree. Preserve unrelated user changes and identify the smallest coherent change that can complete the slice.
 7. Implement the slice. Use tests to drive observable behavior where practical. Settle details during implementation only when they are minor, conventional, and reversible and do not constrain later decisions.
-8. Run focused verification first, followed by broader checks only when justified by the change's risk. Diagnose ordinary failures within the slice, but do not add a workaround or expand scope without explicit approval.
-9. Update relevant durable documentation and `CURRENT_WORK.md` to reflect the actual result, including incomplete work, failed verification, remaining risks, and the next planned slice. Do not claim completion unless the approved outcome and required verification are satisfied.
-10. Report the completed outcome, changed areas, verification performed, anything not verified, and the next planned work. Then stop.
+8. Run focused verification first, followed by broader checks only when justified by the change's risk. For a concrete failure, rerun its original reproducer when practical. Evidence must come from the final relevant code, build, service, and environment and exercise the intended target. Confirm that checks completed and actually ran; skipped or empty checks, timeouts, partial results, and wrong-target checks are not proof. Recheck affected behavior after any later relevant change. Diagnose ordinary failures within the slice, but do not add a workaround or expand scope without explicit approval.
+9. Update relevant durable documentation and `CURRENT_WORK.md` to reflect the actual result, including incomplete work, failed verification, remaining risks, and the next planned slice. Claim an issue fixed, resolved, or complete only when the user accepts the result or current, relevant evidence clearly shows the actual problem is gone. A passing test proves only what it exercised. Otherwise report the change as implemented but unverified, partially verified, incomplete, or still failing. Do not infer broader correctness or no regressions from narrow checks.
+10. Report the implementation result, changed areas, evidence gathered, anything not verified, and the next planned work. When the user asks for evidence, provide the concrete observed result or inspectable artifact and its limits rather than restating the conclusion. Then stop.
 
 ## Boundaries
 

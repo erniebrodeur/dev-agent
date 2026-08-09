@@ -120,6 +120,27 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("authorization boundary", policy)
         self.assertIn("Approval authorizes implementation of that slice only", policy)
 
+    def test_policy_requires_evidence_before_fix_claims(self) -> None:
+        policy = POLICY_PATH.read_text()
+        authorization = policy.split("## Authorization\n", 1)[1].split(
+            "\n## Questions and assumptions", 1
+        )[0]
+        proof = policy.split("## Proof\n", 1)[1].split("\n## Project memory", 1)[0]
+
+        self.assertIn(
+            "A request to fix a concrete failure authorizes diagnosis, not an unknown correction",
+            authorization,
+        )
+        self.assertIn("Success depends on the problem", proof)
+        self.assertIn("user accepts the result", proof)
+        self.assertIn("current, relevant evidence", proof)
+        self.assertIn("An edit or code inspection proves only that code changed", proof)
+        self.assertIn("A passing test proves only", proof)
+        self.assertIn("final relevant code, build, service, and environment", proof)
+        self.assertIn("do not claim it is fixed", proof)
+        self.assertIn("provide the concrete observed result", proof)
+        self.assertNotIn("security check", proof.lower())
+
     def test_next_slice_implements_one_approved_slice(self) -> None:
         skill = (NEXT_SLICE_ROOT / "SKILL.md").read_text()
         metadata = (NEXT_SLICE_ROOT / "agents" / "openai.yaml").read_text()
@@ -132,6 +153,10 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("does not block implementation", skill)
         self.assertIn("minor, conventional, and reversible", skill)
         self.assertIn("Return to planning", skill)
+        self.assertIn("Success depends on the problem", skill)
+        self.assertIn("final relevant code, build, service, and environment", skill)
+        self.assertIn("implemented but unverified", skill)
+        self.assertIn("provide the concrete observed result", skill)
         self.assertIn("CURRENT_WORK.md", skill)
         self.assertIn("Do not begin another slice", skill)
         self.assertIn("Committing, pushing", skill)
@@ -185,6 +210,9 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("falsify", skill)
         self.assertIn("recent change", skill)
         self.assertIn("confidence and remaining uncertainty", skill)
+        self.assertIn("authorizes diagnosis only", skill)
+        self.assertIn("Do not report the failure as fixed or resolved", skill)
+        self.assertNotIn("security checks", skill.lower())
         self.assertIn("Do not edit implementation files", skill)
         self.assertIn("corrective slice", skill)
         self.assertIn("wait for explicit approval", skill)
@@ -256,6 +284,7 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertIn("Start here", guide)
         self.assertIn("Authorization boundaries", guide)
+        self.assertIn("does not call a problem fixed", guide)
         self.assertIn("`$copy-agents`", guide)
         self.assertNotIn("unqualified", skill.lower())
         self.assertNotIn("unqualified", guide.lower())

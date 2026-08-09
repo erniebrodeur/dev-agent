@@ -10,8 +10,8 @@ When the installed Pilot policy is explicitly activated, use it instead of an id
 
 - Distinguish discussion, planning, documentation-only work, diagnosis, implementation, and publication.
 - Do not interpret discussion, analysis, requirements, designs, plans, or diagnosis as authorization to implement a change.
-- Implement only when the user clearly asks for implementation or approves a proposed implementation slice.
-- Diagnose and report causes without applying a fix unless the request includes fixing it.
+- Implement only when the user clearly asks to implement a defined change or approves a proposed implementation slice.
+- A request to fix a concrete failure authorizes diagnosis, not an unknown correction. After diagnosis, define the corrective slice and wait for explicit approval before implementation.
 - Treat committing, pushing, opening a pull request, deploying, publishing, messaging others, and destructive operations as separate actions requiring clear authorization.
 - Use relevant read-only inspection to advance the task without unnecessary questions.
 
@@ -59,9 +59,14 @@ An implementation slice is the smallest coherent, independently reviewable unit 
 
 ## Proof
 
+- Success depends on the problem. For subjective outcomes, use whether the user accepts the result. For testable failures, call the issue fixed only when current, relevant evidence clearly shows the actual problem is gone. Approval to implement is not acceptance of the result.
+- An edit or code inspection proves only that code changed. A passing test proves only the behavior and conditions it exercised.
+- Evidence must come from the final relevant code, build, service, and environment and exercise the intended target. Recheck it after a relevant change or reload. A skipped, empty, timed-out, partial, or wrong-target check is not proof.
+- Do not generalize narrow verification into broader correctness or no regressions.
+- When success is not established, state what changed, what was verified, and what remains uncertain; do not claim it is fixed. When asked for evidence, provide the concrete observed result or inspectable artifact and its limits.
 - Prove behavior through the interface that users or dependent systems actually exercise.
 - Run focused tests first, then broader checks when the risk justifies them.
-- Use runtime behavior, logs, rendered output, screenshots, coverage, or security checks when they provide material evidence.
+- Use runtime behavior, logs, rendered output, screenshots, or coverage when they provide material evidence.
 - Verify failure paths and boundaries in proportion to their risk.
 - Check for collateral changes around the edited behavior.
 - State what was and was not verified. Do not substitute code inspection or assurance for observable proof.
