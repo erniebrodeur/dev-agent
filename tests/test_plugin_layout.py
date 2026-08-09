@@ -23,6 +23,7 @@ PLANNING_ROOT = PLUGIN_ROOT / "skills" / "planning"
 NEXT_SLICE_ROOT = PLUGIN_ROOT / "skills" / "next-slice"
 TROUBLESHOOT_ROOT = PLUGIN_ROOT / "skills" / "troubleshoot"
 SECURITY_CHECK_ROOT = PLUGIN_ROOT / "skills" / "security-check"
+UTILITY_BUILDER_ROOT = PLUGIN_ROOT / "skills" / "utility-builder"
 
 
 class PluginLayoutTests(unittest.TestCase):
@@ -43,6 +44,10 @@ class PluginLayoutTests(unittest.TestCase):
         )
         self.assertIn(
             "Reusable read-only Git status reporting",
+            manifest["interface"]["capabilities"],
+        )
+        self.assertIn(
+            "Deterministic repository utility creation",
             manifest["interface"]["capabilities"],
         )
 
@@ -214,6 +219,25 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("allow_implicit_invocation: false", metadata)
         self.assertNotIn("[TODO:", skill)
 
+    def test_utility_builder_owns_deterministic_repository_scripts(self) -> None:
+        skill = (UTILITY_BUILDER_ROOT / "SKILL.md").read_text()
+        metadata = (UTILITY_BUILDER_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("repeatable and deterministic", skill)
+        self.assertIn("token and context use", skill)
+        self.assertIn("Ask whether the user wants the script built", skill)
+        self.assertIn("Wait for explicit approval", skill)
+        self.assertIn("Bash is always an acceptable implementation choice", skill)
+        self.assertIn("repository's existing language and toolchain", skill)
+        self.assertIn("`scripts/`", skill)
+        self.assertIn("`cmd/`", skill)
+        self.assertIn("complete authoritative procedure", skill)
+        self.assertIn("test bundle", skill)
+        self.assertIn("Use an existing repository script", skill)
+        self.assertIn("does not authorize executing", skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
     def test_marketplace_points_to_plugin(self) -> None:
         marketplace = json.loads(MARKETPLACE_PATH.read_text())
         entries = [entry for entry in marketplace["plugins"] if entry["name"] == "pilot"]
@@ -261,6 +285,8 @@ class PluginLayoutTests(unittest.TestCase):
                         "skills/security-check/agents/openai.yaml",
                         "skills/troubleshoot/SKILL.md",
                         "skills/troubleshoot/agents/openai.yaml",
+                        "skills/utility-builder/SKILL.md",
+                        "skills/utility-builder/agents/openai.yaml",
                     ],
                     archive.namelist(),
                 )
