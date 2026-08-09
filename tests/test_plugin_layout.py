@@ -45,11 +45,13 @@ class PluginLayoutTests(unittest.TestCase):
         manifest = json.loads(MANIFEST_PATH.read_text())
 
         self.assertEqual(PLUGIN_ROOT.name, manifest["name"])
-        self.assertEqual("1.0.0", manifest["version"])
+        self.assertEqual("1.0.1", manifest["version"])
         self.assertEqual("./skills/", manifest["skills"])
         self.assertNotIn("apps", manifest)
         self.assertNotIn("mcpServers", manifest)
         self.assertEqual("GPL-3.0-only", manifest["license"])
+        self.assertEqual("Ernie Brodeur", manifest["author"]["name"])
+        self.assertEqual("ebrodeur@ujami.net", manifest["author"]["email"])
         self.assertEqual(
             "https://erniebrodeur.github.io/pilot/",
             manifest["homepage"],
@@ -59,6 +61,7 @@ class PluginLayoutTests(unittest.TestCase):
             manifest["repository"],
         )
         interface = manifest["interface"]
+        self.assertEqual("Ernie Brodeur", interface["developerName"])
         self.assertEqual("Developer Tools", interface["category"])
         self.assertEqual(["Interactive", "Write"], interface["capabilities"])
         self.assertEqual(3, len(interface["defaultPrompt"]))

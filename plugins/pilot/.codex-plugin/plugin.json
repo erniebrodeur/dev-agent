@@ -1,9 +1,10 @@
 {
   "name": "pilot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reusable development workflows for Codex.",
   "author": {
-    "name": "Pilot contributors",
+    "name": "Ernie Brodeur",
+    "email": "ebrodeur@ujami.net",
     "url": "https://github.com/erniebrodeur/pilot"
   },
   "homepage": "https://erniebrodeur.github.io/pilot/",
@@ -20,7 +21,7 @@
     "displayName": "Pilot",
     "shortDescription": "Disciplined development workflows for Codex.",
     "longDescription": "Pilot provides reusable workflows for planning, implementing, verifying, troubleshooting, and managing software changes with Codex.",
-    "developerName": "Pilot contributors",
+    "developerName": "Ernie Brodeur",
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
