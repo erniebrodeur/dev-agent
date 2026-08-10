@@ -2,7 +2,7 @@
 
 Pilot is a Codex plugin for disciplined, evidence-driven software development workflows.
 
-Pilot can activate its portable development policy for one task, show a canonical capability guide, install a project-owned copy, recover project context, plan and implement focused changes, build deterministic repository utilities, report Git status, prepare local commits, diagnose failures, and run user-authorized Semgrep security checks.
+Pilot can activate its portable development policy for one task, show a canonical capability guide, install a project-owned copy, recover project context, plan and implement focused changes, build deterministic repository utilities, report Git status, prepare local commits, execute distinct version releases, diagnose failures, and run user-authorized Semgrep security checks.
 
 [Documentation](https://erniebrodeur.github.io/pilot/) · [Privacy](https://erniebrodeur.github.io/pilot/privacy/) · [Terms](https://erniebrodeur.github.io/pilot/terms/)
 
@@ -44,6 +44,8 @@ Git status is an explicit read-only workflow and Pilot's sole automatic Git-stat
 
 Local commits use a two-phase workflow. An initial request to prepare, stage, or create a commit authorizes Pilot to resolve and stage only the intended changes, inspect the complete staged diff, and show the exact scope and proposed message. It does not invoke the Git-status workflow. A standalone request to suggest, review, or discuss a possible message remains read-only and does not authorize staging. The workflow creates no commit until the user explicitly approves its exact proposal in a later message, rechecks for drift before committing, and never pushes implicitly.
 
+Releases use a separate approval-gated workflow. Pilot first requires every intended substantive change to be committed. It then prepares a dedicated `version bump` commit containing only version changes and proposes the exact commit, tag, branch, remote, and push operation. After explicit approval, it runs the final Git preflight, creates the version commit and matching tag, pushes the branch and tag atomically when supported, and verifies remote publication when possible.
+
 ## Repository layout
 
 - `plugins/pilot/` contains the installable plugin.
@@ -74,15 +76,21 @@ for deterministic output. The generated `dist/` directory is ignored by Git.
 
 ## Release
 
-Push a `vMAJOR.MINOR.PATCH` tag that matches the version in the plugin manifest:
+Ask Pilot to prepare a release, or manually create a dedicated version boundary:
 
 ```sh
-git tag v1.0.0
-git push origin v1.0.0
+python3 -m unittest discover -s tests
+# Update only version metadata, then commit it separately.
+git add plugins/pilot/.codex-plugin/plugin.json tests/test_plugin_layout.py docs/index.html
+git commit -m "version bump"
+git tag -a v1.0.0 -m "Pilot 1.0.0"
+git push --atomic origin main v1.0.0
 ```
 
-The release workflow runs the tests, builds the plugin archive once, and publishes
-it as a versioned GitHub Release asset such as `pilot-v1.0.0.zip`.
+The tag must match the version in the plugin manifest and resolve to the isolated
+`version bump` commit. The GitHub workflow reruns the tests, builds the plugin
+archive once, and publishes it as a versioned release asset such as
+`pilot-v1.0.0.zip`.
 
 ## License
 

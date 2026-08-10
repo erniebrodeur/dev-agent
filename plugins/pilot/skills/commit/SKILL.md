@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Prepare and create a local Git commit through two explicit authorization phases. Use when the user asks to prepare or stage changes for a commit, asks to create a local commit, or approves the exact staged scope and message previously prepared by this skill. A request only to suggest, review, or discuss a possible commit message is read-only and does not invoke this workflow. An initial commit request stages the intended changes and proposes the exact commit but never creates it without later approval.
+description: Prepare and create a local Git commit through two explicit authorization phases. Use when the user asks to prepare or stage changes for a commit, asks to create a local commit, or approves the exact staged scope and message previously prepared by this skill. A request only to suggest, review, or discuss a possible commit message is read-only and does not invoke this workflow. An initial commit request stages the intended changes and proposes the exact commit but never creates it without later approval. Do not own the specialized version commit, tag, and push transaction handled by the release skill.
 ---
 
 # Commit
@@ -37,3 +37,4 @@ A standalone request to suggest, review, or discuss a possible commit message do
 - Do not amend, reset, rebase, merge, or tag unless separately authorized.
 - Do not push, open a pull request, deploy, publish, or perform another remote action unless separately authorized.
 - Do not bypass hooks or weaken verification to make the commit succeed.
+- Do not own a release transaction. Apply this workflow only to substantive pre-release changes when `release` directs it; `release` owns its dedicated version commit, tag, and push.

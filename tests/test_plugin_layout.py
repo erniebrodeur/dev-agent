@@ -17,6 +17,7 @@ MARKETPLACE_PATH = ROOT / ".agents" / "plugins" / "marketplace.json"
 POLICY_PATH = PLUGIN_ROOT / "AGENTS.md"
 ACTIVATE_ROOT = PLUGIN_ROOT / "skills" / "activate"
 COMMIT_ROOT = PLUGIN_ROOT / "skills" / "commit"
+RELEASE_ROOT = PLUGIN_ROOT / "skills" / "release"
 BOOTSTRAP_REPO_WITH_AGENT_ROOT = (
     PLUGIN_ROOT / "skills" / "bootstrap-repo-with-agent"
 )
@@ -138,6 +139,7 @@ class PluginLayoutTests(unittest.TestCase):
             "next-slice": skill_description(NEXT_SLICE_ROOT).lower(),
             "troubleshoot": skill_description(TROUBLESHOOT_ROOT).lower(),
             "commit": skill_description(COMMIT_ROOT).lower(),
+            "release": skill_description(RELEASE_ROOT).lower(),
             "bootstrap-repo-with-agent": skill_description(
                 BOOTSTRAP_REPO_WITH_AGENT_ROOT
             ).lower(),
@@ -177,6 +179,14 @@ class PluginLayoutTests(unittest.TestCase):
                 "Prepare or stage these changes for a commit.",
                 "commit",
                 ("prepare or stage changes", "create a local commit"),
+            ),
+            (
+                "Prepare and publish version 1.0.3.",
+                "release",
+                (
+                    "prepare and execute a versioned release",
+                    "dedicated `version bump` commit",
+                ),
             ),
             (
                 "$bootstrap-repo-with-agent: install Pilot policy in this project's AGENTS.md.",
@@ -296,6 +306,7 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("Wait for explicit approval", skill)
         self.assertIn("material drift", skill)
         self.assertIn("Do not push", skill)
+        self.assertIn("Do not own a release transaction", skill)
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
@@ -323,6 +334,27 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertNotIn("`../git-status/SKILL.md`", commit_skill)
         self.assertIn("without invoking Git status", recover_skill)
         self.assertIn("Do not invoke Git status", next_slice_skill)
+        self.assertIn("allow_implicit_invocation: true", metadata)
+        self.assertNotIn("[TODO:", skill)
+
+    def test_release_creates_an_approved_distinct_version_boundary(self) -> None:
+        skill = (RELEASE_ROOT / "SKILL.md").read_text()
+        metadata = (RELEASE_ROOT / "agents" / "openai.yaml").read_text()
+
+        self.assertIn("authorizes preparation only", skill)
+        self.assertIn(
+            "All such changes must be committed before the version bump",
+            skill,
+        )
+        self.assertIn("`../commit/SKILL.md`", skill)
+        self.assertIn("commit message `version bump`", skill)
+        self.assertIn("only the version changes", skill)
+        self.assertIn("exact staged version scope", skill)
+        self.assertIn("`../git-status/SKILL.md`", skill)
+        self.assertIn("final local release preflight", skill)
+        self.assertIn("Push the approved branch and tag together atomically", skill)
+        self.assertIn("Never force-push", skill)
+        self.assertIn("publication was triggered but remains unverified", skill)
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
@@ -491,6 +523,8 @@ class PluginLayoutTests(unittest.TestCase):
                     "skills/planning/agents/openai.yaml",
                     "skills/recover-project-context/SKILL.md",
                     "skills/recover-project-context/agents/openai.yaml",
+                    "skills/release/SKILL.md",
+                    "skills/release/agents/openai.yaml",
                     "skills/security-check/SKILL.md",
                     "skills/security-check/agents/openai.yaml",
                     "skills/troubleshoot/SKILL.md",

@@ -18,6 +18,7 @@ Pilot provides development workflows with clear boundaries between planning, imp
 - **Check security:** Optionally request a security check to run Semgrep and report findings without applying fixes.
 - **Inspect Git:** Ask for Git status to receive a concise, read-only repository report. Pilot otherwise invokes it only immediately before an authorized release.
 - **Commit:** Ask Pilot to prepare, stage, or create a commit. It stages and inspects the exact scope, proposes a message, and waits for approval before committing. Asking only for help with a possible message remains read-only.
+- **Release:** Ask Pilot to prepare or execute a version release. It commits substantive work first, isolates version changes in a `version bump` commit, and waits for approval of the exact commit, tag, branch, remote, and push operation.
 
 ## Authorization boundaries
 
@@ -26,4 +27,5 @@ Pilot provides development workflows with clear boundaries between planning, imp
 - Pilot does not call a problem fixed from an edit alone. Success requires user acceptance or current, relevant evidence that the actual problem is gone.
 - Troubleshooting and security checks do not authorize fixes.
 - Commit creation requires approval of the exact staged scope and message.
-- Pushing, pull requests, releases, deployments, and destructive actions require separate authorization.
+- A release executes only after approval of its exact commit, tag, branch, remote, and push proposal.
+- Other pushes, pull requests, deployments, and destructive actions require separate authorization.
