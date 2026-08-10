@@ -46,7 +46,7 @@ class PluginLayoutTests(unittest.TestCase):
         manifest = json.loads(MANIFEST_PATH.read_text())
 
         self.assertEqual(PLUGIN_ROOT.name, manifest["name"])
-        self.assertEqual("1.0.2", manifest["version"])
+        self.assertEqual("1.0.3", manifest["version"])
         self.assertEqual("./skills/", manifest["skills"])
         self.assertNotIn("apps", manifest)
         self.assertNotIn("mcpServers", manifest)
