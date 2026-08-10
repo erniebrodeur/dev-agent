@@ -16,7 +16,7 @@ Pilot provides development workflows with clear boundaries between planning, imp
 - **Build a utility:** Ask Pilot to create or change an authoritative repository script for a repeatable procedure. Merely running a build, test, deployment, or existing script is not utility building.
 - **Troubleshoot:** Give Pilot an undiagnosed concrete failure with no approved correction. A fix request starts diagnosis, but an approved correction returns to `next-slice` for implementation.
 - **Check security:** Optionally request a security check to run Semgrep and report findings without applying fixes.
-- **Inspect Git:** Ask for Git status to receive a concise, read-only repository report.
+- **Inspect Git:** Ask for Git status to receive a concise, read-only repository report. Pilot otherwise invokes it only immediately before an authorized release.
 - **Commit:** Ask Pilot to prepare, stage, or create a commit. It stages and inspects the exact scope, proposes a message, and waits for approval before committing. Asking only for help with a possible message remains read-only.
 
 ## Authorization boundaries

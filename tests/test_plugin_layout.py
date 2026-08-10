@@ -100,6 +100,7 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("not a standard development artifact", skill)
         self.assertIn("Ask whether the user wants", skill)
         self.assertIn("tracked or ignored", skill)
+        self.assertIn("without invoking Git status", skill)
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 
@@ -109,6 +110,11 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("Be willing to create `CURRENT_WORK.md`", policy)
         self.assertIn("tracked or ignored", policy)
         self.assertIn("wait for approval before writing", policy)
+        self.assertIn(
+            "final local preflight immediately before executing an authorized release",
+            policy,
+        )
+        self.assertIn("Do not invoke it automatically during activation", policy)
 
     def test_planning_is_an_implicit_conversational_loop(self) -> None:
         skill = (PLANNING_ROOT / "SKILL.md").read_text()
@@ -308,8 +314,15 @@ class PluginLayoutTests(unittest.TestCase):
         self.assertIn("staged, unstaged, and untracked", skill)
         self.assertIn("Do not fetch", skill)
         self.assertIn("Do not reproduce", skill)
-        self.assertIn("`../git-status/SKILL.md`", commit_skill)
-        self.assertIn("mandatory first step", commit_skill)
+        recover_skill = (RECOVER_CONTEXT_ROOT / "SKILL.md").read_text()
+        next_slice_skill = (NEXT_SLICE_ROOT / "SKILL.md").read_text()
+
+        self.assertIn("immediately before executing an authorized release", skill)
+        self.assertIn("Automatic invocation is limited", skill)
+        self.assertIn("Do not invoke the Git-status workflow", commit_skill)
+        self.assertNotIn("`../git-status/SKILL.md`", commit_skill)
+        self.assertIn("without invoking Git status", recover_skill)
+        self.assertIn("Do not invoke Git status", next_slice_skill)
         self.assertIn("allow_implicit_invocation: true", metadata)
         self.assertNotIn("[TODO:", skill)
 

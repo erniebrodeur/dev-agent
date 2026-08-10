@@ -12,12 +12,12 @@ Reconstruct the project's present state and return a compact, evidence-based che
 1. Resolve the active repository root. Read applicable project instructions before interpreting other files.
 2. Check explicitly for a root `CURRENT_WORK.md`, including when ignored by Git.
 3. When `CURRENT_WORK.md` exists, read it completely, then surface-scan the repository to verify it:
-   - Inspect the working tree, branch, recent history, and diff summary.
-   - Inspect the top-level tracked structure and relevant internal or public documentation.
+   - Inspect the relevant current files and top-level structure without invoking Git status.
+   - Inspect relevant internal or public documentation.
    - Read configuration, tests, or source only as needed to confirm present-state claims.
    - Identify stale, unsupported, or contradictory checkpoint content instead of repeating it as fact.
 4. When `CURRENT_WORK.md` is absent, deep-scan the repository:
-   - Inspect the working tree, branch, recent history, recent changes, and tracked structure.
+   - Inspect the repository structure and relevant current files without invoking Git status.
    - Read applicable instructions, internal documentation, public documentation, manifests, configuration, test structure, and representative source entry points.
    - Follow evidence into additional files until the current work, settled decisions, and likely next work are reasonably supported.
    - Exclude dependencies, generated output, caches, large vendored content, and sensitive ignored files unless the task specifically requires them.

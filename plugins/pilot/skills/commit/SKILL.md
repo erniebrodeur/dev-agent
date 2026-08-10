@@ -15,20 +15,19 @@ A standalone request to suggest, review, or discuss a possible commit message do
 
 ## Preparation phase
 
-1. Read applicable project instructions, then read `../git-status/SKILL.md` completely and run it as the mandatory first step. Use its report as the single Git-state baseline for the preparation phase.
-2. Resolve the intended change set from the request, current work, and repository evidence. Preserve unrelated changes. If scope is ambiguous or unrelated changes are already staged, stop and ask before modifying the index.
-3. Run or confirm proportional verification for the intended changes. Report any relevant verification that is incomplete or failing rather than concealing it.
-4. Review the intended content, then stage only the intended files with explicit paths. Include deletions only when they are clearly in scope. Do not use a broad staging command while scope is unresolved.
-5. Inspect the complete staged diff, including generated and binary artifacts. Check it for secrets, personal data, local paths, internal hostnames, unintended metadata, and unrelated content. Stop and report any safety concern without repeating sensitive values.
-6. Derive a concise commit message that describes the staged outcome. If the user supplied a message, preserve it as the proposal unless it is misleading or unsafe; report any required correction.
-7. Show the exact staged scope and proposed message, along with relevant verification and safety findings. Wait for explicit approval. Do not create the commit during this phase, even when the original request said to commit.
+1. Read applicable project instructions. Resolve the intended change set from the request, current work, and repository evidence. Preserve unrelated changes. If scope is ambiguous or unrelated changes are already staged, stop and ask before modifying the index. Do not invoke the Git-status workflow during commit preparation.
+2. Run or confirm proportional verification for the intended changes. Report any relevant verification that is incomplete or failing rather than concealing it.
+3. Review the intended content, then stage only the intended files with explicit paths. Include deletions only when they are clearly in scope. Do not use a broad staging command while scope is unresolved.
+4. Inspect the complete staged diff, including generated and binary artifacts. Check it for secrets, personal data, local paths, internal hostnames, unintended metadata, and unrelated content. Stop and report any safety concern without repeating sensitive values.
+5. Derive a concise commit message that describes the staged outcome. If the user supplied a message, preserve it as the proposal unless it is misleading or unsafe; report any required correction.
+6. Show the exact staged scope and proposed message, along with relevant verification and safety findings. Wait for explicit approval. Do not create the commit during this phase, even when the original request said to commit.
 
 ## Commit phase
 
 1. Confirm that the user's approval clearly applies to the exact staged scope and proposed message.
-2. Reinspect the staged diff and working-tree status. If the staged content, intended scope, relevant verification, or message has material drift, do not commit. Return to the preparation phase and show the revised proposal.
+2. Reinspect the staged diff and intended paths for material drift. If the staged content, intended scope, relevant verification, or message has changed materially, do not commit. Return to the preparation phase and show the revised proposal.
 3. Create the local commit with the approved message and exactly the approved staged content.
-4. Report the commit identifier, message, resulting repository status, and any hook or commit failure. Then stop.
+4. Report the commit identifier, message, and any hook or commit failure. Then stop.
 
 ## Boundaries
 

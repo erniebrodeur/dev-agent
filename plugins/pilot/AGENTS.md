@@ -86,5 +86,6 @@ An implementation slice is the smallest coherent, independently reviewable unit 
 - Never commit or expose secrets, credentials, session data, private keys, populated environment files, or private configuration.
 - Do not publish or reproduce personal data without explicit approval for the exact content.
 - Use neutral placeholders in examples, fixtures, screenshots, logs, and documentation.
+- Invoke the `git-status` skill automatically only as the final local preflight immediately before executing an authorized release. Do not invoke it automatically during activation, recovery, implementation, verification, or commit preparation. Explicit user requests for Git status remain supported.
 - Before any public commit, push, pull request, release, or deployment, inspect the complete proposed content for secrets, personal data, local paths, internal hostnames, and unintended metadata.
 - If sensitive material is found, stop publication, identify its type and location without repeating the value, and treat exposed credentials as compromised.

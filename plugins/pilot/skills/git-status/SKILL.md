@@ -1,11 +1,13 @@
 ---
 name: git-status
-description: Report concise, read-only Git repository state. Use when the user asks for Git status, repository status, branch state, working-tree changes, staged changes, or commit readiness, and as the mandatory first step of the commit workflow. Do not use as a general wrapper for branch management or other Git commands.
+description: Report concise, read-only Git repository state. Use when the user explicitly asks for Git status, repository status, branch state, working-tree changes, staged changes, or commit readiness. Also use automatically as the final local preflight immediately before executing an authorized release. Do not invoke automatically during activation, context recovery, implementation, verification, or commit preparation, and do not use as a general wrapper for other Git commands.
 ---
 
 # Git Status
 
 Inspect and report the repository's locally known Git state without changing it.
+
+Automatic invocation is limited to the final local preflight immediately before an authorized release. Release discussion, planning, or readiness advice does not authorize either this workflow or the release.
 
 ## Workflow
 
@@ -24,6 +26,7 @@ Inspect and report the repository's locally known Git state without changing it.
    - concise current-work or commit-readiness summary;
    - any ambiguity, stale upstream limitation, or safety concern.
 4. When the worktree is clean, say so directly. Do not inflate an empty report.
+5. For a release preflight, stop the release when the status exposes unresolved, ambiguous, or unintended local changes. This check supplements rather than replaces the release's complete public-content inspection.
 
 ## Safety
 

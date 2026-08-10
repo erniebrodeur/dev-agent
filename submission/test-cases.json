@@ -8,10 +8,11 @@
       "expected_workflow": "Use `activate`; load the installed Pilot policy completely; apply root `CONVENTIONS.md` when present; run `recover-project-context` to completion; make no repository changes; and report activation only after recovery finishes.",
       "result_shape": "A concise task-scoped activation confirmation, conventions status, and evidence-based checkpoint covering completed work, active changes, settled decisions, risks, and the best-supported next action.",
       "fixture": {
-        "repository_state": "A small Git repository pinned at a known commit with a tracked `CURRENT_WORK.md`, a root `CONVENTIONS.md`, and known branch, history, and worktree state.",
+        "repository_state": "A small repository with a `CURRENT_WORK.md`, a root `CONVENTIONS.md`, and source and documentation that independently support the checkpoint.",
         "proof_points": [
           "`CURRENT_WORK.md` records one completed checkpoint and one planned next action.",
-          "Repository history and status independently support at least one checkpoint claim."
+          "Current source or documentation independently supports at least one checkpoint claim.",
+          "Activation and recovery complete without invoking Git status."
         ]
       }
     },
@@ -61,8 +62,8 @@
       "id": "prepare-json-commit",
       "kind": "positive",
       "prompt": "Prepare a local commit containing only the JSON-output changes, with message `feat: add JSON list output`.",
-      "expected_workflow": "Use `commit`; run `git-status` first; resolve and verify the intended JSON changes; stage only their exact paths; inspect the complete staged diff for unrelated or unsafe content; preserve the supplied message; and wait for later approval without committing or pushing.",
-      "result_shape": "The branch and status baseline, exact staged paths, proposed message, verification evidence, public-safety result, unrelated changes left unstaged, and a request to approve that exact commit.",
+      "expected_workflow": "Use `commit`; do not invoke `git-status`; resolve and verify the intended JSON changes; stage only their exact paths; inspect the complete staged diff for unrelated or unsafe content; preserve the supplied message; and wait for later approval without committing or pushing.",
+      "result_shape": "The exact staged paths, proposed message, verification evidence, public-safety result, unrelated changes left unstaged, and a request to approve that exact commit.",
       "fixture": {
         "repository_state": "A CLI repository pinned at a known commit with intended JSON-output modifications plus one unrelated untracked file and no pre-staged changes.",
         "proof_points": [
