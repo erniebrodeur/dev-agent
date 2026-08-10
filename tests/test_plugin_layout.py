@@ -184,7 +184,7 @@ class PluginLayoutTests(unittest.TestCase):
                 "Prepare and publish version 1.0.3.",
                 "release",
                 (
-                    "prepare and execute a versioned release",
+                    "prepare and execute a user-specified version release",
                     "dedicated `version bump` commit",
                 ),
             ),
@@ -342,6 +342,9 @@ class PluginLayoutTests(unittest.TestCase):
         metadata = (RELEASE_ROOT / "agents" / "openai.yaml").read_text()
 
         self.assertIn("authorizes preparation only", skill)
+        self.assertIn("Require the user to supply the exact target version", skill)
+        self.assertIn("When it is absent, ask for it and stop", skill)
+        self.assertIn("Never infer, calculate, recommend, or select", skill)
         self.assertIn(
             "All such changes must be committed before the version bump",
             skill,

@@ -1,6 +1,6 @@
 ---
 name: release
-description: Prepare and execute a versioned release through explicit approval checkpoints. Use when the user asks to prepare, create, publish, or execute a release, or approves an exact release proposal. Require all intended substantive changes to be committed first, create a dedicated `version bump` commit containing only version changes, tag that commit, and push the branch and tag. Do not use for release discussion, readiness advice, changelog drafting, or merely running existing release tooling.
+description: Prepare and execute a user-specified version release through explicit approval checkpoints. Use when the user asks to prepare, create, publish, or execute a release, or approves an exact release proposal. Require the user to supply the exact release version, commit all intended substantive changes first, create a dedicated `version bump` commit containing only version changes, tag that commit, and push the branch and tag. Do not use for release discussion, readiness advice, changelog drafting, or merely running existing release tooling.
 ---
 
 # Release
@@ -15,21 +15,22 @@ Release discussion and readiness advice remain read-only. Approval of a release 
 
 ## Preparation
 
-1. Read applicable project instructions. Inspect the repository's version source, tag format, release automation, verification commands, active branch, remote, and existing release conventions. Determine the target version from the user's request; ask when choosing it requires product intent. Do not invoke the Git-status workflow during preparation.
-2. Confirm that the target version and tag are valid, unused, and consistent with the repository's versioning scheme. Never move, replace, or reuse an existing release tag.
-3. Identify every intentional substantive change for the release. All such changes must be committed before the version bump. Do not treat ignored, generated, unrelated, ambiguous, sensitive, or unsafe material as release content merely because it exists locally.
-4. When substantive changes remain uncommitted, read `../commit/SKILL.md` completely and apply its preparation workflow to those changes. Stop for approval of that exact substantive commit. Resume release preparation only after the commit exists and the intended substantive work is committed.
-5. Run the repository's proportional pre-release verification against the substantive release commit. Inspect the complete content that the release will make public for secrets, personal data, local paths, internal hostnames, unintended metadata, and unexpected generated or binary artifacts. Stop on any failure or safety concern.
-6. Change only the files and fields required to advance the repository's declared version. Matching version assertions or displayed version metadata count as version changes; behavioral changes, release notes, cleanup, and unrelated documentation do not.
-7. Run focused version checks and the repository's required release verification. Stage only the version changes with explicit paths and inspect the complete staged diff.
-8. Propose the exact release transaction:
+1. Require the user to supply the exact target version. When it is absent, ask for it and stop. Never infer, calculate, recommend, or select the release version from existing tags, commit history, semantic-version rules, or repository changes.
+2. Read applicable project instructions. Inspect the repository's version source, tag format, release automation, verification commands, active branch, remote, and existing release conventions. Do not invoke the Git-status workflow during preparation.
+3. Confirm that the target version and tag are valid, unused, and consistent with the repository's versioning scheme. Never move, replace, or reuse an existing release tag.
+4. Identify every intentional substantive change for the release. All such changes must be committed before the version bump. Do not treat ignored, generated, unrelated, ambiguous, sensitive, or unsafe material as release content merely because it exists locally.
+5. When substantive changes remain uncommitted, read `../commit/SKILL.md` completely and apply its preparation workflow to those changes. Stop for approval of that exact substantive commit. Resume release preparation only after the commit exists and the intended substantive work is committed.
+6. Run the repository's proportional pre-release verification against the substantive release commit. Inspect the complete content that the release will make public for secrets, personal data, local paths, internal hostnames, unintended metadata, and unexpected generated or binary artifacts. Stop on any failure or safety concern.
+7. Change only the files and fields required to advance the repository's declared version. Matching version assertions or displayed version metadata count as version changes; behavioral changes, release notes, cleanup, and unrelated documentation do not.
+8. Run focused version checks and the repository's required release verification. Stage only the version changes with explicit paths and inspect the complete staged diff.
+9. Propose the exact release transaction:
    - staged version-only paths;
    - commit message `version bump`;
    - target version and tag;
    - tag type and message, following the repository's established convention;
    - remote and branch to push;
    - verification and public-content inspection results.
-9. Wait for explicit approval of the complete proposal. Do not commit, tag, or push during preparation.
+10. Wait for explicit approval of the complete proposal. Do not commit, tag, or push during preparation.
 
 ## Execution
 
@@ -51,6 +52,6 @@ Release discussion and readiness advice remain read-only. Approval of a release 
 
 - Keep substantive work out of the `version bump` commit.
 - Do not create an empty release or release from an unintended branch or detached HEAD.
-- Do not select a semantic-version increment when the user's intent is unclear.
+- Do not proceed without an exact release version supplied by the user, even when the next semantic-version increment appears obvious.
 - Do not bypass tests, hooks, branch protection, release checks, or public-repository safety review.
 - Do not claim a pushed tag proves that remote publication succeeded.

@@ -44,7 +44,7 @@ Git status is an explicit read-only workflow and Pilot's sole automatic Git-stat
 
 Local commits use a two-phase workflow. An initial request to prepare, stage, or create a commit authorizes Pilot to resolve and stage only the intended changes, inspect the complete staged diff, and show the exact scope and proposed message. It does not invoke the Git-status workflow. A standalone request to suggest, review, or discuss a possible message remains read-only and does not authorize staging. The workflow creates no commit until the user explicitly approves its exact proposal in a later message, rechecks for drift before committing, and never pushes implicitly.
 
-Releases use a separate approval-gated workflow. Pilot first requires every intended substantive change to be committed. It then prepares a dedicated `version bump` commit containing only version changes and proposes the exact commit, tag, branch, remote, and push operation. After explicit approval, it runs the final Git preflight, creates the version commit and matching tag, pushes the branch and tag atomically when supported, and verifies remote publication when possible.
+Releases use a separate approval-gated workflow. The user must supply the exact release version; Pilot never infers the increment. Pilot first requires every intended substantive change to be committed. It then prepares a dedicated `version bump` commit containing only version changes and proposes the exact commit, tag, branch, remote, and push operation. After explicit approval, it runs the final Git preflight, creates the version commit and matching tag, pushes the branch and tag atomically when supported, and verifies remote publication when possible.
 
 ## Repository layout
 
